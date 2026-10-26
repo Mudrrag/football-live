@@ -28,7 +28,7 @@ footer{border-top:1px solid var(--line);padding:19px 0 28px;color:var(--muted);f
 <header><div class="wrap nav"><div class="brand"><div class="logo">⚽</div><div>مدرج <span>LIVE</span></div></div><div class="tag">نسخة تجريبية</div></div></header>
 <section class="hero"><div class="wrap"><div class="hero-card"><div class="kicker">المكان يجمع عشاق الكرة</div><h1>المباراة تبدأ من هنا.</h1><p>تابع جدول المواجهات وافتح صفحة المباراة. يدعم المشغّل روابط YouTube المسموح بتضمينها، أو فيديوهات تملك حق عرضها. تجربة أولية قابلة للتطوير من الجوال.</p><div class="actions"><button class="btn primary" onclick="document.querySelector('#today').scrollIntoView({behavior:'smooth'})">استعرض المباريات ↓</button><button class="btn secondary" onclick="document.querySelector('#admin').scrollIntoView({behavior:'smooth'})">إدارة المباريات</button></div></div></div></section>
 <main class="wrap" id="today">
-<div class="section-head"><h2>المباريات</h2><span class="muted" id="count">مباراتان تجريبيتان</span></div>
+<div class="section-head"><h2>المباريات</h2><span class="muted" id="count">3 مباريات</span></div>
 <div class="filters"><button class="filter active" data-filter="all">الكل</button><button class="filter" data-filter="soon">قادمة</button><button class="filter" data-filter="live">مباشر</button></div>
 <div class="matches" id="matches"></div>
 <div class="notice">تنبيه: أسماء الفرق والمواعيد الظاهرة تجريبية وليست جدولًا حيًا. أضف فقط روابط تملك حق عرضها أو يسمح صاحبها بتضمينها. روابط YouTube قد لا تعمل داخل المشغّل إذا عطّل صاحب الفيديو التضمين.</div>
@@ -47,7 +47,8 @@ footer{border-top:1px solid var(--line);padding:19px 0 28px;color:var(--muted);f
 <script>
 const games=[
 {id:1,home:'الفريق الأخضر',away:'الفريق الأبيض',league:'مباراة تجريبية',time:'موعد يحدد لاحقًا',status:'soon',stream:''},
-{id:2,home:'نجوم المدينة',away:'صقور الملعب',league:'مباراة تجريبية',time:'موعد يحدد لاحقًا',status:'soon',stream:''}
+{id:2,home:'نجوم المدينة',away:'صقور الملعب',league:'مباراة تجريبية',time:'موعد يحدد لاحقًا',status:'soon',stream:''},
+{id:3,home:'القادسية',away:'السد',league:'مباراة — تحقق من الجدول الرسمي',time:'لم يحدد الموعد',status:'live',stream:''}
 ];
 let activeFilter='all';
 const el=id=>document.getElementById(id);
@@ -103,4 +104,4 @@ el('addForm').addEventListener('submit',e=>{
 el('year').textContent=new Date().getFullYear();render();
 </script>
 </body>
-</html>
+ </html>
