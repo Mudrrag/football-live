@@ -61,7 +61,7 @@ function render(){
 document.querySelectorAll('.filter').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');activeFilter=b.dataset.filter;render()}));
 function getYouTubeId(url){
  try{
-  const u=new URL(url);
+  const u=new URL(url);https://mksjdavhrbtorkqoocez.supabase.co/rest/v1/
   if(u.hostname==='youtu.be') return u.pathname.split('/').filter(Boolean)[0]||'';
   if(u.hostname.endsWith('youtube.com')){
    if(u.pathname==='/watch') return u.searchParams.get('v')||'';
