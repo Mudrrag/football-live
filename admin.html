@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b12">
+  <title>مدرج LIVE | لوحة التحكم</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080b12;
+      --panel: #111722;
+      --line: #283344;
+      --gold: #e5bb63;
+      --text: #f4f6fa;
+      --muted: #9ba8ba;
+      --red: #ef6464;
+      --green: #57d6a0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: Tahoma, Arial, sans-serif; min-height: 100vh;
+    }
+    .wrap { width: min(100% - 24px, 850px); margin: auto; padding: 24px 0 50px; }
+    header { text-align: center; padding: 15px 0 24px; }
+    .logo { color: var(--gold); font-size: 30px; font-weight: 900; letter-spacing: 1px; }
+    .sub { color: var(--muted); font-size: 13px; margin-top: 9px; }
+    .panel {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: 17px; padding: 18px; margin-bottom: 17px;
+    }
+    h2 { font-size: 18px; margin: 0 0 17px; }
+    .hint { color: var(--muted); font-size: 12px; line-height: 1.8; }
+    label { display: block; color: #c8d1df; font-size: 13px; margin: 12px 0 7px; }
+    input, select {
+      width: 100%; min-height: 46px; padding: 12px;
+      border: 1px solid var(--line); border-radius: 10px;
+      background: #0a0f18; color: var(--text); font: inherit;
+      font-size: 14px; outline: none;
+    }
+    input:focus, select:focus { border-color: var(--gold); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+    button {
+      border: 0; border-radius: 10px; padding: 12px 16px;
+      font: inherit; font-weight: bold; cursor: pointer; min-height: 44px;
+    }
+    button:disabled { opacity: .55; cursor: wait; }
+    .primary { background: var(--gold); color: #17120a; width: 100%; margin-top: 17px; }
+    .secondary { background: #263449; color: white; }
+    .danger { background: #4a2028; color: #ffb8b8; }
+    .small { min-height: 38px; padding: 9px 12px; font-size: 12px; }
+    .hidden { display: none !important; }
+    .status { font-size: 13px; line-height: 1.8; margin-top: 12px; overflow-wrap: anywhere; }
+    .status.error { color: #ff8585; }
+    .status.ok { color: var(--green); }
+    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+    .count { color: var(--gold); font-size: 13px; }
+    .match {
+      border: 1px solid var(--line); border-radius: 13px;
+      padding: 14px; margin-top: 11px; background: #0c121c;
+    }
+    .teams { font-weight: bold; font-size: 16px; line-height: 1.8; overflow-wrap: anywhere; }
+    .meta { color: var(--muted); font-size: 12px; line-height: 2; margin: 6px 0 12px; overflow-wrap: anywhere; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .actions button { flex: 1; }
+    .tag { display: inline-block; color: var(--gold); border: 1px solid #65512e; border-radius: 20px; padding: 3px 9px; font-size: 11px; margin-bottom: 8px; }
+    .empty { color: var(--muted); text-align: center; padding: 22px 5px; font-size: 13px; }
+    @media(max-width: 480px) {
+      .grid { grid-template-columns: 1fr; }
+      .panel { padding: 15px; }
+      .logo { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">مدرج <span style="color:white">LIVE</span></div>
+    <div class="sub">لوحة إدارة المباريات والبث المباشر</div>
+  </header>
+
+  <section id="loginPanel" class="panel">
+    <h2>تسجيل دخول المدير</h2>
+    <p class="hint">سجّل الدخول بحساب Supabase المعتمد كمدير.</p>
+    <form id="loginForm">
+      <label for="email">البريد الإلكتروني</label>
+      <input id="email" type="email" autocomplete="username" required>
+      <label for="password">كلمة المرور</label>
+      <input id="password" type="password" autocomplete="current-password" required>
+      <button class="primary" id="loginBtn" type="submit">تسجيل الدخول</button>
+    </form>
+    <div id="loginMsg" class="status" role="status"></div>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <div class="panel">
+      <div class="toolbar">
+        <h2 style="margin:0">إدارة المباريات</h2>
+        <button id="logoutBtn" class="secondary small" type="button">تسجيل الخروج</button>
+      </div>
+      <p class="hint">أضف المباراة وحدد حالتها ورابط بثها. التعديلات تُحفظ في قاعدة البيانات.</p>
+    </div>
+
+    <form id="matchForm" class="panel">
+      <h2 id="formTitle">إضافة مباراة جديدة</h2>
+      <div class="grid">
+        <div>
+          <label for="home">الفريق المستضيف *</label>
+          <input id="home" maxlength="100" required placeholder="مثال: الهلال">
+        </div>
+        <div>
+          <label for="away">الفريق الضيف *</label>
+          <input id="away" maxlength="100" required placeholder="مثال: النصر">
+        </div>
+        <div>
+          <label for="league">البطولة</label>
+          <input id="league" maxlength="150" placeholder="مثال: دوري روشن">
+        </div>
+        <div>
+          <label for="matchTime">موعد المباراة</label>
+          <input id="matchTime" type="datetime-local">
+        </div>
+      </div>
+      <label for="matchStatus">حالة المباراة</label>
+      <select id="matchStatus">
+        <option value="soon">قادمة</option>
+        <option value="live">مباشر</option>
+      </select>
+      <label for="stream">رابط البث</label>
+      <input id="stream" type="url" inputmode="url" placeholder="https://example.com/stream">
+      <p class="hint">استخدم رابط بث تملك حق نشره أو استخدامه.</p>
+      <button class="primary" id="saveBtn" type="submit">حفظ المباراة</button>
+      <button class="secondary hidden" id="cancelEditBtn" type="button" style="width:100%;margin-top:9px">إلغاء التعديل</button>
+      <div id="formMsg" class="status" role="status"></div>
+    </form>
+
+    <section class="panel">
+      <div class="toolbar">
+        <h2 style="margin:0">المباريات المسجلة</h2>
+        <button id="refreshBtn" class="secondary small" type="button">تحديث</button>
+      </div>
+      <div id="listMsg" class="status"></div>
+      <div id="matchesList"><div class="empty">جاري تحميل المباريات...</div></div>
+    </section>
+  </section>
+  <footer class="hint" style="text-align:center;padding:10px">مدرج LIVE · لوحة خاصة بالمدير</footer>
+</div>
+
+<script>
+(() => {
+  // إعدادات مشروع Supabase الحالي
+  const SUPABASE_URL = 'https://mksjdavhrbtorkqoocez.supabase.co';
+
+  // ضع هنا الـ Publishable key نفسه المستخدم في index.html.
+  // لا تضع service_role أو أي مفتاح سري في هذا الملف.
+  const SUPABASE_PUBLISHABLE_KEY = 'const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_Ql5GPUQvGkh6oKwcoG7i7w_8K2DUX6s';';
+
+  const $ = id => document.getElementById(id);
+  const loginPanel = $('loginPanel');
+  const dashboard = $('dashboard');
+  let supabaseClient;
+  let editingId = null;
+  let matchesCache = [];
+
+  function message(id, text, type = '') {
+    const el = $(id);
+    el.textContent = text;
+    el.className = 'status' + (type ? ' ' + type : '');
+  }
+
+  function validHttpUrl(value) {
+    if (!value) return true;
+    try {
+      const url = new URL(value);
+      return url.protocol === 'https:' || url.protocol === 'http:';
+    } catch {
+      return false;
+    }
+  }
+
+  function showDashboard(show) {
+    loginPanel.classList.toggle('hidden', show);
+    dashboard.classList.toggle('hidden', !show);
+  }
+
+  function localDateValue(value) {
+    if (!value) return '';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+    const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    return local.toISOString().slice(0, 16);
+  }
+
+  function displayDate(value) {
+    if (!value) return 'غير محدد';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'غير محدد';
+    return date.toLocaleString('ar-SA', {
+      dateStyle: 'medium', timeStyle: 'short'
+    });
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;',
+      '"': '&quot;', "'": '&#39;'
+    }[char]));
+  }
+
+  async function loadMatches() {
+    $('matchesList').innerHTML = '<div class="empty">جاري تحميل المباريات...</div>';
+    message('listMsg', '');
+    const { data, error } = await supabaseClient
+      .from('matches')
+      .select('id,home,away,league,match_time,status,stream,created_at')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      $('matchesList').innerHTML = '';
+      message('listMsg', 'تعذر تحميل المباريات: ' + error.message, 'error');
+      return;
+    }
+
+    matchesCache = data || [];
+    renderMatches();
+  }
+
+  function renderMatches() {
+    const list = $('matchesList');
+    $('matchesList').innerHTML = '';
+
+    if (!matchesCache.length) {
+      list.innerHTML = '<div class="empty">لا توجد مباريات حتى الآن. أضف أول مباراة من النموذج أعلاه.</div>';
+      return;
+    }
+
+    matchesCache.forEach(match => {
+      const card = document.createElement('article');
+      card.className = 'match';
+      const isLive = String(match.status || '').toLowerCase() === 'live' ||
+        String(match.status || '').includes('مباشر');
+
+      card.innerHTML = `
+        <span class="tag">${isLive ? '● مباشر' : 'قادمة'}</span>
+        <div class="teams">${escapeHtml(match.home)} <span style="color:#e5bb63">×</span> ${escapeHtml(match.away)}</div>
+        <div class="meta">
+          البطولة: ${escapeHtml(match.league || 'غير محددة')}<br>
+          الموعد: ${escapeHtml(displayDate(match.match_time))}<br>
+          رابط البث: ${match.stream ? 'مضاف' : 'غير مضاف'}
+        </div>
+        <div class="actions">
+          <button class="secondary small" type="button" data-action="edit">تعديل</button>
+          <button class="danger small" type="button" data-action="delete">حذف</button>
+        </div>
+      `;
+
+      card.querySelector('[data-action="edit"]').addEventListener('click', () => editMatch(match.id));
+      card.querySelector('[data-action="delete"]').addEventListener('click', () => deleteMatch(match.id));
+      list.appendChild(card);
+    });
+  }
+
+  function resetForm() {
+    editingId = null;
+    $('matchForm').reset();
+    $('formTitle').textContent = 'إضافة مباراة جديدة';
+    $('saveBtn').textContent = 'حفظ المباراة';
+    $('cancelEditBtn').classList.add('hidden');
+    message('formMsg', '');
+  }
+
+  function editMatch(id) {
+    const match = matchesCache.find(item => String(item.id) === String(id));
+    if (!match) return;
+
+    editingId = match.id;
+    $('home').value = match.home || '';
+    $('away').value = match.away || '';
+    $('league').value = match.league || '';
+    $('matchTime').value = localDateValue(match.match_time);
+    $('matchStatus').value =
+      (String(match.status || '').toLowerCase() === 'live' ||
+       String(match.status || '').includes('مباشر')) ? 'live' : 'soon';
+    $('stream').value = match.stream || '';
+    $('formTitle').textContent = 'تعديل المباراة';
+    $('saveBtn').textContent = 'حفظ التعديلات';
+    $('cancelEditBtn').classList.remove('hidden');
+    $('formMsg').textContent = '';
+    $('matchForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  async function deleteMatch(id) {
+    const match = matchesCache.find(item => String(item.id) === String(id));
+    if (!match) return;
+    if (!confirm(`تأكيد حذف مباراة ${match.home} × ${match.away}؟`)) return;
+
+    message('listMsg', 'جاري حذف المباراة...');
+    const { error } = await supabaseClient.from('matches').delete().eq('id', id);
+    if (error) {
+      message('listMsg', 'تعذر الحذف: ' + error.message, 'error');
+      return;
+    }
+
+    message('listMsg', 'تم تنفيذ طلب الحذف. جارٍ تحديث القائمة...', 'ok');
+    await loadMatches();
+  }
+
+  $('loginForm').addEventListener('submit', async event => {
+    event.preventDefault();
+
+    if (!supabaseClient) {
+      message('loginMsg', 'أضف Publishable key الصحيح في الكود أولًا.', 'error');
+      return;
+    }
+
+    const button = $('loginBtn');
+    button.disabled = true;
+    message('loginMsg', 'جاري تسجيل الدخول...');
+
+    const { error } = await supabaseClient.auth.signInWithPassword({
+      email: $('email').value.trim(),
+      password: $('password').value
+    });
+
+    button.disabled = false;
+
+    if (error) {
+      message('loginMsg', 'تعذر تسجيل الدخول: ' + error.message, 'error');
+      return;
+    }
+
+    message('loginMsg', '');
+    showDashboard(true);
+    await loadMatches();
+  });
+
+  $('matchForm').addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!supabaseClient) return;
+
+    const home = $('home').value.trim();
+    const away = $('away').value.trim();
+    const league = $('league').value.trim();
+    const timeValue = $('matchTime').value;
+    const stream = $('stream').value.trim();
+
+    if (!home || !away) {
+      message('formMsg', 'اكتب اسم الفريقين.', 'error');
+      return;
+    }
+    if (!validHttpUrl(stream)) {
+      message('formMsg', 'رابط البث غير صحيح؛ استخدم رابط يبدأ بـ https:// أو http://', 'error');
+      return;
+    }
+
+    const payload = {
+      home,
+      away,
+      league: league || null,
+      match_time: timeValue ? new Date(timeValue).toISOString() : null,
+      status: $('matchStatus').value,
+      stream: stream || null
+    };
+
+    const button = $('saveBtn');
+    button.disabled = true;
+    message('formMsg', 'جاري حفظ المباراة...');
+
+    let result;
+    if (editingId !== null) {
+      result = await supabaseClient.from('matches').update(payload).eq('id', editingId);
+    } else {
+      result = await supabaseClient.from('matches').insert(payload);
+    }
+
+    button.disabled = false;
+
+    if (result.error) {
+      message('formMsg', 'لم تُحفظ المباراة: ' + result.error.message, 'error');
+      return;
+    }
+
+    message('formMsg', 'تم إرسال الحفظ بنجاح.', 'ok');
+    resetForm();
+    await loadMatches();
+  });
+
+  $('cancelEditBtn').addEventListener('click', resetForm);
+  $('refreshBtn').addEventListener('click', loadMatches);
+
+  $('logoutBtn').addEventListener('click', async () => {
+    await supabaseClient.auth.signOut();
+    showDashboard(false);
+    $('password').value = '';
+    message('loginMsg', 'تم تسجيل الخروج.', 'ok');
+  });
+
+  if (window.supabase &&
+      SUPABASE_PUBLISHABLE_KEY !== 'ضع_مفتاح_Publishable_هنا' &&
+      SUPABASE_PUBLISHABLE_KEY.trim()) {
+    supabaseClient = window.supabase.createClient(
+      SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY
+    );
+
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' || (!session && event === 'INITIAL_SESSION')) {
+        showDashboard(false);
+      }
+    });
+
+    supabaseClient.auth.getSession().then(({ data, error }) => {
+      if (error) {
+        message('loginMsg', 'تعذر فحص الجلسة: ' + error.message, 'error');
+        return;
+      }
+      if (data.session) {
+        showDashboard(true);
+        loadMatches();
+      }
+    });
+  } else {
+    message('loginMsg', 'قبل الاستخدام: استبدل النص الموجود في SUPABASE_PUBLISHABLE_KEY بمفتاح Publishable من مشروعك.', 'error');
+  }
+})();
+</script>
+</body>
+  </html>
+  
