@@ -344,11 +344,14 @@ button{font:inherit;cursor:pointer}
  border-color:#566361;
 }
 
-/* زر المشاهدة - تصميم جلد الفهد ووجهه الحقيقي */
+/* زر المشاهدة - جلد الفهد ووجهه الحقيقي */
 .watch{
  position:relative;
  isolation:isolate;
  overflow:hidden;
+ display:flex;
+ align-items:center;
+ justify-content:center;
  width:100%;
  min-height:58px;
  border:1px solid #D8B36F;
@@ -363,14 +366,14 @@ button{font:inherit;cursor:pointer}
  radial-gradient(ellipse 7px 9px at 83% 75%,#704821 0 65%,transparent 73%),
  linear-gradient(120deg,#D8B778,#A97839 55%,#D6B16D);
  color:#FFFFFF;
- font-size:13px;
+ font-size:15px;
  font-weight:900;
- padding:13px 78px 13px 12px;
+ padding:7px 78px 7px 12px;
  box-shadow:0 4px 16px #00000055;
  transition:filter .2s,transform .2s;
 }
 
-/* صورة وجه الفهد الحقيقي من cheetah.webp */
+/* وجه الفهد الحقيقي */
 .watch:after{
  content:"";
  position:absolute;
@@ -394,16 +397,12 @@ button{font:inherit;cursor:pointer}
  box-shadow:0 2px 9px #00000070;
 }
 
-/* المساحة الداكنة لعبارة المشاهدة */
+/* المستطيل الداكن يملأ إطار الزر من الداخل */
 .watch:before{
  content:"";
  position:absolute;
  z-index:1;
- top:50%;
- left:50%;
- transform:translate(-50%,-50%);
- width:calc(100% - 85px);
- height:70%;
+ inset:4px;
  border:1px solid #D9B873;
  border-radius:9px;
  background:linear-gradient(110deg,#17130FEE,#292018F2);
@@ -411,10 +410,21 @@ button{font:inherit;cursor:pointer}
  pointer-events:none;
 }
 
+/* تمديد العبارة لتناسب المساحة */
 .watch span{
  position:relative;
  z-index:3;
- display:inline-block;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ flex:1;
+ min-width:0;
+ min-height:40px;
+ font-size:15px;
+ font-weight:900;
+ white-space:nowrap;
+ text-align:center;
+ transform:scaleX(1.08);
  text-shadow:0 2px 4px #000000;
 }
 
@@ -440,6 +450,7 @@ button{font:inherit;cursor:pointer}
 
 .watch:disabled span{
  text-shadow:none;
+ transform:none;
 }
 
 footer{
@@ -459,7 +470,7 @@ footer{
  .brand{gap:12px}
  .match{grid-template-columns:minmax(140px,.8fr) minmax(240px,1.5fr) minmax(125px,.75fr)}
  .watch-wrap{grid-column:1/-1}
- .watch{padding:10px 78px 10px 12px}
+ .watch{padding:7px 78px 7px 12px}
  .time-block{border-left:0}
 }
 
@@ -521,13 +532,18 @@ footer{
  .status{margin:0;font-size:10px}
  .watch-wrap{grid-column:1/-1}
  .watch{
-  font-size:12px;
-  padding:10px 78px 10px 12px;
+  font-size:14px;
+  padding:6px 72px 6px 10px;
   min-height:54px;
  }
  .watch:after{
   width:60px;
   height:48px;
+ }
+ .watch span{
+  min-height:38px;
+  font-size:14px;
+  transform:scaleX(1.04);
  }
 }
 </style>
