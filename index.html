@@ -344,51 +344,76 @@ button{font:inherit;cursor:pointer}
  border-color:#566361;
 }
 
-/* زر مشاهدة الآن - نقشة جلد الفهد */
+/* زر مشاهدة الآن - تصميم وجه الفهد رقم 4 */
 .watch{
  position:relative;
  isolation:isolate;
  overflow:hidden;
  width:100%;
- border:1px solid #D7BC8C;
- border-radius:11px;
- background-color:#B9955E;
+ min-height:58px;
+ border:1px solid #D8B36F;
+ border-radius:13px;
+ background-color:#B98D4D;
  background-image:
- radial-gradient(ellipse 10px 7px at 12% 25%,#17130F 0 65%,transparent 72%),
- radial-gradient(ellipse 7px 11px at 20% 72%,#21180F 0 65%,transparent 73%),
- radial-gradient(ellipse 13px 8px at 35% 18%,#17130F 0 65%,transparent 73%),
- radial-gradient(ellipse 8px 12px at 45% 78%,#21180F 0 65%,transparent 73%),
- radial-gradient(ellipse 11px 7px at 58% 35%,#17130F 0 65%,transparent 73%),
- radial-gradient(ellipse 7px 10px at 72% 76%,#21180F 0 65%,transparent 73%),
- radial-gradient(ellipse 12px 8px at 85% 22%,#17130F 0 65%,transparent 73%),
- radial-gradient(ellipse 8px 11px at 94% 60%,#21180F 0 65%,transparent 73%),
- radial-gradient(ellipse 5px 4px at 28% 42%,#17130F 0 65%,transparent 73%),
- radial-gradient(ellipse 5px 4px at 66% 12%,#17130F 0 65%,transparent 73%);
+ radial-gradient(ellipse 9px 6px at 12% 25%,#704821 0 65%,transparent 73%),
+ radial-gradient(ellipse 7px 9px at 24% 76%,#704821 0 65%,transparent 73%),
+ radial-gradient(ellipse 11px 7px at 42% 17%,#704821 0 65%,transparent 73%),
+ radial-gradient(ellipse 8px 10px at 53% 78%,#704821 0 65%,transparent 73%),
+ radial-gradient(ellipse 10px 7px at 70% 25%,#704821 0 65%,transparent 73%),
+ radial-gradient(ellipse 7px 9px at 83% 75%,#704821 0 65%,transparent 73%),
+ linear-gradient(120deg,#D8B778,#A97839 55%,#D6B16D);
  color:#FFFFFF;
  font-size:13px;
  font-weight:900;
- padding:13px 10px;
+ padding:13px 78px 13px 12px;
  box-shadow:0 4px 16px #00000055;
  transition:filter .2s,transform .2s;
 }
 
+/* وجه الفهد على الطرف الأيمن */
+.watch:after{
+ content:"";
+ position:absolute;
+ z-index:2;
+ top:50%;
+ right:5px;
+ transform:translateY(-50%);
+ width:66px;
+ height:54px;
+ opacity:.96;
+ pointer-events:none;
+ background-repeat:no-repeat;
+ background-position:center;
+ background-size:contain;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23241910' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 37 10 13 35 22 Q50 13 65 22 L90 13 81 39 Q91 57 76 77 Q63 91 50 94 Q37 91 24 77 Q9 57 19 37Z'/%3E%3Cpath d='M25 42 Q36 31 47 43 Q37 53 25 42Z M53 43 Q64 31 75 42 Q63 53 53 43Z'/%3E%3Cpath d='M34 45 40 44 M60 44 66 45 M43 62 Q50 54 57 62 L50 69Z'/%3E%3Cpath d='M50 69 Q44 79 36 75 M50 69 Q56 79 64 75 M35 58 18 55 M35 64 17 66 M65 58 82 55 M65 64 83 66'/%3E%3C/g%3E%3Cg fill='%23241910'%3E%3Cellipse cx='21' cy='32' rx='3' ry='4'/%3E%3Cellipse cx='79' cy='32' rx='3' ry='4'/%3E%3Ccircle cx='30' cy='19' r='2.5'/%3E%3Ccircle cx='70' cy='19' r='2.5'/%3E%3Ccircle cx='15' cy='45' r='2.5'/%3E%3Ccircle cx='85' cy='45' r='2.5'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* مساحة داكنة مستقلة لعبارة المشاهدة */
 .watch:before{
  content:"";
  position:absolute;
- inset:0;
- z-index:-1;
- background:linear-gradient(110deg,#17130FBB,#17130F88 50%,#17130FCC);
+ z-index:1;
+ top:50%;
+ left:50%;
+ transform:translate(-50%,-50%);
+ width:calc(100% - 85px);
+ height:70%;
+ border:1px solid #D9B873;
+ border-radius:9px;
+ background:linear-gradient(110deg,#17130FEE,#292018F2);
+ box-shadow:0 2px 8px #00000055;
+ pointer-events:none;
 }
 
 .watch span{
  position:relative;
- z-index:1;
+ z-index:3;
  display:inline-block;
  text-shadow:0 2px 4px #000000;
 }
 
 .watch:hover{
- filter:brightness(1.15);
+ filter:brightness(1.13);
  transform:translateY(-1px);
  box-shadow:0 5px 20px #00000080;
 }
@@ -402,8 +427,14 @@ button{font:inherit;cursor:pointer}
  box-shadow:none;
 }
 
-.watch:disabled:before{display:none}
-.watch:disabled span{text-shadow:none}
+.watch:disabled:before,
+.watch:disabled:after{
+ display:none;
+}
+
+.watch:disabled span{
+ text-shadow:none;
+}
 
 footer{
  border-top:1px solid #29423D;
@@ -422,7 +453,7 @@ footer{
  .brand{gap:12px}
  .match{grid-template-columns:minmax(140px,.8fr) minmax(240px,1.5fr) minmax(125px,.75fr)}
  .watch-wrap{grid-column:1/-1}
- .watch{padding:10px}
+ .watch{padding:10px 78px 10px 12px}
  .time-block{border-left:0}
 }
 
@@ -483,7 +514,12 @@ footer{
  .date{font-size:11px;margin:0}
  .status{margin:0;font-size:10px}
  .watch-wrap{grid-column:1/-1}
- .watch{font-size:12px;padding:10px}
+ .watch{
+  font-size:12px;
+  padding:10px 78px 10px 12px;
+  min-height:54px;
+ }
+ .watch:after{width:60px;height:49px}
 }
 </style>
 </head>
