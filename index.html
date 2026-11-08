@@ -1,154 +1,525 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0b1118">
+<meta name="theme-color" content="#0b1020">
 <meta name="description" content="مدرج الفهد Live — جدول المباريات وروابط المشاهدة">
 <title>مدرج الفهد Live | The Cheetah</title>
+
 <style>
-:root{--bg:#020806;--panel:#07100c;--line:#26342d;--green:#00e676;--green2:#a0ffc8;--text:#f5f8f6;--muted:#a6b0aa;--red:#ff424b}
+:root{
+ --bg:#090e1c;
+ --panel:#111a2b;
+ --line:#34415b;
+ --accent:#b69cff;
+ --accent2:#79d9d0;
+ --gold:#e8c98b;
+ --text:#f4f1ff;
+ --muted:#a8aec3;
+ --red:#ff788b;
+}
+
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0,#0a2718 0,transparent 55%),linear-gradient(180deg,#020806,#040c08);background-color:#020806;color:var(--text);font-family:Tahoma,Arial,sans-serif}
+
+body{
+ margin:0;
+ min-height:100vh;
+ background:
+ radial-gradient(ellipse at 50% 0%,#292348 0,transparent 53%),
+ radial-gradient(ellipse at 90% 45%,#142c42 0,transparent 45%),
+ linear-gradient(180deg,#090e1c,#101426 55%,#0a1020);
+ background-color:var(--bg);
+ color:var(--text);
+ font-family:Tahoma,Arial,sans-serif;
+}
+
 .wrap{width:min(1420px,94%);margin:auto}
-header{position:relative;overflow:hidden;border-bottom:1px solid #17281e;background:rgba(2,8,6,.88)}
-header:after{content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#00e676,transparent);opacity:.75}
-.top{min-height:300px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative}
+
+header{
+ position:relative;
+ overflow:hidden;
+ border-bottom:1px solid #34334f;
+ background:rgba(9,14,28,.91);
+}
+
+header:after{
+ content:"";
+ position:absolute;
+ bottom:0;left:0;right:0;height:2px;
+ background:linear-gradient(90deg,transparent,#b69cff,#79d9d0,#e8c98b,transparent);
+ opacity:.9;
+}
+
+.top{
+ min-height:300px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:20px;
+ position:relative;
+}
+
 .brand{display:flex;align-items:center;gap:25px;min-width:0}
-.cheetah{width:clamp(145px,29vw,390px);height:260px;flex:0 0 auto;background-color:#07100c;background-position:center;background-size:contain;background-repeat:no-repeat;background-image:url("./cheetah.webp");background-size:cover;background-position:center 35%;mask-image:linear-gradient(90deg,#000 70%,transparent 100%);-webkit-mask-image:linear-gradient(90deg,#000 70%,transparent 100%);filter:contrast(1.08) saturate(.88)}
-.brand-copy{border-right:1px solid #a87b31;padding:8px 0 8px 22px}
-.eyebrow{color:#d6aa52;font-size:clamp(12px,1.5vw,19px);letter-spacing:6px;font-weight:700;margin:0 0 5px}
-.brand h1{font-family:Arial,Tahoma,sans-serif;direction:ltr;text-align:right;line-height:.93;font-size:clamp(34px,6.2vw,82px);letter-spacing:1px;margin:0;font-weight:900}
-.brand h1 .the{display:block;font-size:.34em;color:#d5a548;letter-spacing:7px;margin-bottom:9px}
-.brand h1 .cheetah-word{display:block;color:#f6f7f6}
-.brand h1 .live-word{display:block;color:var(--green);font-size:.47em;letter-spacing:10px;margin-top:10px}
-.subtitle{font-size:clamp(11px,1.4vw,16px);color:#87928b;margin:14px 0 0}
-.live-pill{align-self:flex-start;margin-top:28px;border:1px solid #333a35;border-radius:30px;padding:11px 17px;font-size:13px;white-space:nowrap;background:#020806a8}
-.live-pill i{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green);margin-left:8px;box-shadow:0 0 12px #00e676}
+
+.cheetah{
+ width:clamp(145px,29vw,390px);
+ height:260px;
+ flex:0 0 auto;
+ background-color:#111a2b;
+ background-position:center 35%;
+ background-size:cover;
+ background-repeat:no-repeat;
+ background-image:url("./cheetah.webp");
+ mask-image:linear-gradient(90deg,#000 70%,transparent 100%);
+ -webkit-mask-image:linear-gradient(90deg,#000 70%,transparent 100%);
+ filter:contrast(1.08) saturate(.88);
+}
+
+.brand-copy{
+ border-right:1px solid var(--gold);
+ padding:8px 0 8px 22px;
+}
+
+.eyebrow{
+ color:var(--gold);
+ font-size:clamp(12px,1.5vw,19px);
+ letter-spacing:6px;
+ font-weight:700;
+ margin:0 0 5px;
+}
+
+.brand h1{
+ font-family:Arial,Tahoma,sans-serif;
+ direction:ltr;
+ text-align:right;
+ line-height:.93;
+ font-size:clamp(34px,6.2vw,82px);
+ letter-spacing:1px;
+ margin:0;
+ font-weight:900;
+}
+
+.brand h1 .the{
+ display:block;
+ font-size:.34em;
+ color:var(--gold);
+ letter-spacing:7px;
+ margin-bottom:9px;
+}
+
+.brand h1 .cheetah-word{display:block;color:#f6f3ff}
+
+.brand h1 .live-word{
+ display:block;
+ color:var(--accent);
+ font-size:.47em;
+ letter-spacing:10px;
+ margin-top:10px;
+}
+
+.subtitle{
+ font-size:clamp(11px,1.4vw,16px);
+ color:#aeb5ca;
+ margin:14px 0 0;
+}
+
+.live-pill{
+ align-self:flex-start;
+ margin-top:28px;
+ border:1px solid #4b4968;
+ border-radius:30px;
+ padding:11px 17px;
+ font-size:13px;
+ white-space:nowrap;
+ background:#14182ab8;
+}
+
+.live-pill i{
+ display:inline-block;
+ width:10px;height:10px;
+ border-radius:50%;
+ background:var(--accent2);
+ margin-left:8px;
+ box-shadow:0 0 13px #79d9d0;
+}
+
 main{padding-bottom:28px}
 .hero{padding:16px 0 12px}
-.hero h2{font-size:clamp(20px,2.7vw,30px);margin:0 0 5px;line-height:1.5}
-.hero h2 span{color:var(--green)}
-.hero p{font-size:13px;color:var(--muted);line-height:1.8;margin:0}
-.toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 14px;border:1px solid #292f2b;border-radius:14px;background:#050907;margin:10px 0 5px}
-.filters{display:flex;gap:9px;flex-wrap:wrap}
-button{font:inherit;cursor:pointer}
-.filter{min-width:112px;padding:12px 17px;border:1px solid #292f2b;background:#070b09;color:#dfe5e1;border-radius:11px}
-.filter.active{color:var(--green);border-color:#08753e;background:#04150c;font-weight:800}
-.count{color:#d6ddd8;font-size:13px}.count strong{color:var(--green);font-size:17px}
-.message{padding:15px 17px;margin:10px 0;border:1px solid #24382c;border-radius:13px;background:#06110b;color:var(--muted);line-height:1.8;font-size:14px}
-.message.error{color:#ffb6bb;border-color:#71363b}
-.matches{display:flex;flex-direction:column;gap:3px;padding:0 0 18px}
-.match{display:grid;grid-template-columns:minmax(175px,1.05fr) minmax(300px,2.1fr) minmax(150px,.85fr) minmax(150px,.9fr);align-items:center;gap:16px;min-height:108px;padding:13px 18px;background:linear-gradient(100deg,#060a08,#080d0a 52%,#050907);border:1px solid #252c28;border-radius:13px;transition:border-color .15s}
-.match:hover{border-color:#17653b}
-.match.is-live{border-right:3px solid #e72c36}
-.league-block{display:flex;align-items:center;gap:13px;min-width:0}
-.league-symbol{width:49px;height:49px;flex:0 0 49px;border-radius:50%;display:grid;place-items:center;background:#07120b;border:1px solid #303a33;color:var(--green);font-size:22px;font-weight:900}
-.league-name{font-size:13px;font-weight:700;line-height:1.7;overflow-wrap:anywhere}
-.league-sub{font-size:11px;color:#8f9b93;margin-top:3px}
-.teams{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:14px;align-items:center;text-align:center;min-width:0}
-.team{font-weight:900;font-size:clamp(14px,1.7vw,22px);overflow-wrap:anywhere;line-height:1.5}
-.vs{font:900 clamp(18px,2.2vw,28px)/1 Arial,sans-serif;color:#00c96a;direction:ltr}
-.time-block{text-align:center;padding:2px 13px;border-right:1px solid #303732;border-left:1px solid #303732;min-width:0}
-.time{font:700 clamp(21px,2.1vw,29px)/1.25 Arial,Tahoma,sans-serif;direction:ltr;white-space:nowrap}
-.date{font-size:12px;color:var(--green);margin-top:4px;line-height:1.7}
-.status{display:inline-flex;align-items:center;justify-content:center;gap:6px;margin-top:5px;padding:4px 11px;border:1px solid #145a34;border-radius:20px;color:#00e676;background:#03170c;font-size:11px;font-weight:800;white-space:nowrap}
-.status.live{color:#ff6971;background:#21090c;border-color:#6d1d25}
-.status.finished{color:#c2cbc5;background:#141a16;border-color:#414943}
-.watch{width:100%;border:1px solid #087c3e;border-radius:9px;background:linear-gradient(110deg,#064b27,#006b34);color:#f1fff5;font-size:13px;font-weight:900;padding:13px 10px}
-.watch:disabled{background:#151d18;border-color:#2c3730;color:#87958b;cursor:not-allowed}
-footer{border-top:1px solid #1b2a20;text-align:center;padding:18px 0 25px;color:#9ba69f;font-size:12px}
-.footer-cheetah{color:var(--green);margin:0 7px}
-.hidden{display:none!important}
-@media(max-width:900px){.top{min-height:235px}.cheetah{height:220px;width:clamp(125px,27vw,250px)}.brand{gap:12px}.match{grid-template-columns:minmax(140px,.8fr) minmax(240px,1.5fr) minmax(125px,.75fr)}.watch-wrap{grid-column:1/-1}.watch{padding:10px}.time-block{border-left:0}}
-@media(max-width:620px){.wrap{width:94%}.top{min-height:190px;align-items:center;gap:5px}.brand{gap:3px}.cheetah{width:115px;height:170px}.brand-copy{padding:4px 10px 4px 0}.brand h1{font-size:clamp(27px,8vw,39px)}.brand h1 .the{letter-spacing:4px;margin-bottom:6px}.brand h1 .live-word{letter-spacing:6px;margin-top:6px}.subtitle{font-size:10px;margin-top:8px}.live-pill{position:absolute;top:8px;left:0;margin:0;font-size:10px;padding:7px 9px}.hero{padding-top:13px}.hero h2{font-size:21px}.hero p{font-size:11px}.toolbar{padding:9px}.filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:7px}.filter{min-width:0;padding:10px 7px;font-size:12px}.count{font-size:12px}.match{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:10px;padding:12px 10px;min-height:0}.league-block{gap:7px}.league-symbol{width:35px;height:35px;flex-basis:35px;font-size:16px}.league-name{font-size:11px}.league-sub{font-size:10px}.teams{gap:6px}.team{font-size:13px}.vs{font-size:15px}.time-block{grid-column:1/-1;border:0;border-top:1px solid #242f28;padding:9px 0 0;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}.time{font-size:21px}.date{font-size:11px;margin:0}.status{margin:0;font-size:10px}.watch-wrap{grid-column:1/-1}.watch{font-size:12px;padding:10px}}
 
-/* ألوان جديدة: فحمي هادئ مع تركواز واضح */
-:root{
- --bg:#0b1118;
- --panel:#121d27;
- --line:#2a3a48;
- --green:#35d6c2;
- --green2:#a9eee4;
- --text:#edf3f6;
- --muted:#9aabb8;
- --red:#ff5967;
+.hero h2{
+ font-size:clamp(20px,2.7vw,30px);
+ margin:0 0 5px;
+ line-height:1.5;
 }
-body{
- background:radial-gradient(ellipse at 50% 0,#18313b 0,transparent 55%),linear-gradient(180deg,#0b1118,#101923);
- background-color:#0b1118;
+
+.hero h2 span{color:var(--accent)}
+
+.hero p{
+ font-size:13px;
+ color:var(--muted);
+ line-height:1.8;
+ margin:0;
 }
-header{border-bottom-color:#263846;background:rgba(11,17,24,.90)}
-header:after{background:linear-gradient(90deg,transparent,#35d6c2,transparent)}
-.brand-copy{border-right-color:#7893a2}
-.eyebrow,.brand h1 .the{color:#b7c9d3}
-.brand h1 .live-word,.hero h2 span,.count strong,.date,.footer-cheetah{color:var(--green)}
-.subtitle{color:#a2b2bd}
-.live-pill{border-color:#344653;background:#101a23b8}
-.live-pill i{background:var(--green);box-shadow:0 0 12px #35d6c2}
-.toolbar{border-color:#2a3a48;background:#121c26}
-.filter{border-color:#344653;background:#17232e;color:#dce7ec}
-.filter.active{color:var(--green);border-color:#258f86;background:#102b30}
-.message{border-color:#304650;background:#13232b;color:var(--muted)}
-.message.error{color:#ffc0c5;border-color:#87434c}
-.match{background:linear-gradient(100deg,#111b25,#16232d 52%,#101a23);border-color:#2b3b48}
-.match:hover{border-color:#398f89}
-.match.is-live{border-right-color:#e65361}
-.league-symbol{background:#172630;border-color:#3b505d;color:var(--green)}
-.league-sub{color:#9aabb8}
-.vs{color:#35d6c2}
-.time-block{border-right-color:#3a4b57;border-left-color:#3a4b57}
-.status{border-color:#287d75;color:#8ce9dc;background:#102b2d}
-.status.live{color:#ff8791;background:#32171e;border-color:#8b3945}
-.status.finished{color:#c2cdd3;background:#202a32;border-color:#4b5a64}
-.watch{border-color:#278f83;background:linear-gradient(110deg,#176b66,#168f83);color:#f3fffd}
-.watch:disabled{background:#202a32;border-color:#3b4a54;color:#98a8b1}
-footer{border-top-color:#293a46;color:#a1b0ba}
-@media(max-width:900px){.time-block{border-left-color:transparent}}
-@media(max-width:620px){.time-block{border-top-color:#344653}}
+
+.toolbar{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:14px;
+ flex-wrap:wrap;
+ padding:12px 14px;
+ border:1px solid #39425c;
+ border-radius:18px;
+ background:linear-gradient(135deg,#151d31,#111b2b);
+ margin:10px 0 5px;
+ box-shadow:0 8px 28px #05081755;
+}
+
+.filters{display:flex;gap:9px;flex-wrap:wrap}
+
+button{font:inherit;cursor:pointer}
+
+.filter{
+ min-width:112px;
+ padding:12px 17px;
+ border:1px solid #46516c;
+ background:#1a2438;
+ color:#e7e6f4;
+ border-radius:13px;
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ gap:9px;
+ transition:all .2s ease;
+}
+
+.filter-symbol{
+ font-size:22px;
+ line-height:1;
+ font-weight:900;
+ display:inline-block;
+ transform:scale(1.08);
+}
+
+.filter.active{
+ color:#d5c4ff;
+ border-color:#9278d8;
+ background:linear-gradient(135deg,#30294c,#242c48);
+ font-weight:800;
+ box-shadow:0 0 16px #9e83e522,inset 0 0 12px #9e83e511;
+}
+
+.filter:hover{border-color:var(--accent)}
+
+.count{color:#d6d9e8;font-size:13px}
+.count strong{color:var(--accent);font-size:19px}
+
+.message{
+ padding:15px 17px;
+ margin:10px 0;
+ border:1px solid #414b65;
+ border-radius:13px;
+ background:#151e30;
+ color:var(--muted);
+ line-height:1.8;
+ font-size:14px;
+}
+
+.message.error{color:#ffc0c9;border-color:#874657}
+
+.matches{
+ display:flex;
+ flex-direction:column;
+ gap:7px;
+ padding:0 0 18px;
+}
+
+.match{
+ display:grid;
+ grid-template-columns:minmax(175px,1.05fr) minmax(300px,2.1fr) minmax(150px,.85fr) minmax(150px,.9fr);
+ align-items:center;
+ gap:16px;
+ min-height:108px;
+ padding:13px 18px;
+ background:linear-gradient(110deg,#121b2c,#19243a 52%,#111a2b);
+ border:1px solid #39455f;
+ border-radius:16px;
+ transition:border-color .2s,box-shadow .2s;
+ box-shadow:0 5px 18px #05081735;
+}
+
+.match:hover{
+ border-color:#9a83d8;
+ box-shadow:0 0 18px #a58be51b;
+}
+
+.match.is-live{border-right:3px solid var(--red)}
+
+.league-block{display:flex;align-items:center;gap:13px;min-width:0}
+
+.league-symbol{
+ width:49px;height:49px;
+ flex:0 0 49px;
+ border-radius:50%;
+ display:grid;
+ place-items:center;
+ background:linear-gradient(145deg,#242b46,#17283a);
+ border:1px solid #59617b;
+ color:var(--accent2);
+ font-size:22px;
+ font-weight:900;
+}
+
+.league-name{
+ font-size:13px;
+ font-weight:700;
+ line-height:1.7;
+ overflow-wrap:anywhere;
+}
+
+.league-sub{font-size:11px;color:#a5aec3;margin-top:3px}
+
+.teams{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+ gap:14px;
+ align-items:center;
+ text-align:center;
+ min-width:0;
+}
+
+.team{
+ font-weight:900;
+ font-size:clamp(14px,1.7vw,22px);
+ overflow-wrap:anywhere;
+ line-height:1.5;
+}
+
+.vs{
+ font:900 clamp(18px,2.2vw,28px)/1 Arial,sans-serif;
+ color:var(--accent2);
+ direction:ltr;
+}
+
+.time-block{
+ text-align:center;
+ padding:2px 13px;
+ border-right:1px solid #46516b;
+ border-left:1px solid #46516b;
+ min-width:0;
+}
+
+.time{
+ font:700 clamp(21px,2.1vw,29px)/1.25 Arial,Tahoma,sans-serif;
+ direction:ltr;
+ white-space:nowrap;
+}
+
+.date{font-size:12px;color:var(--gold);margin-top:4px;line-height:1.7}
+
+.status{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ gap:6px;
+ margin-top:5px;
+ padding:4px 11px;
+ border:1px solid #557a80;
+ border-radius:20px;
+ color:#9de8df;
+ background:#172e38;
+ font-size:11px;
+ font-weight:800;
+ white-space:nowrap;
+}
+
+.status.live{
+ color:#ff9baa;
+ background:#351c2b;
+ border-color:#985064;
+}
+
+.status.finished{
+ color:#c7cbd9;
+ background:#242b3b;
+ border-color:#555f75;
+}
+
+.watch{
+ width:100%;
+ border:1px solid #8d78d0;
+ border-radius:11px;
+ background:linear-gradient(110deg,#6651a3,#8870c8);
+ color:#fff;
+ font-size:13px;
+ font-weight:900;
+ padding:13px 10px;
+ box-shadow:0 4px 15px #5c4a922b;
+ transition:filter .2s,transform .2s;
+}
+
+.watch:hover{filter:brightness(1.13);transform:translateY(-1px)}
+
+.watch:disabled{
+ background:#252d3d;
+ border-color:#414b5e;
+ color:#929caf;
+ cursor:not-allowed;
+ box-shadow:none;
+}
+
+footer{
+ border-top:1px solid #343d56;
+ text-align:center;
+ padding:18px 0 25px;
+ color:#aab2c5;
+ font-size:12px;
+}
+
+.footer-cheetah{color:var(--gold);margin:0 7px}
+.hidden{display:none!important}
+
+@media(max-width:900px){
+ .top{min-height:235px}
+ .cheetah{height:220px;width:clamp(125px,27vw,250px)}
+ .brand{gap:12px}
+ .match{grid-template-columns:minmax(140px,.8fr) minmax(240px,1.5fr) minmax(125px,.75fr)}
+ .watch-wrap{grid-column:1/-1}
+ .watch{padding:10px}
+ .time-block{border-left:0}
+}
+
+@media(max-width:620px){
+ .wrap{width:94%}
+ .top{min-height:190px;align-items:center;gap:5px}
+ .brand{gap:3px}
+ .cheetah{width:115px;height:170px}
+ .brand-copy{padding:4px 10px 4px 0}
+ .brand h1{font-size:clamp(27px,8vw,39px)}
+ .brand h1 .the{letter-spacing:4px;margin-bottom:6px}
+ .brand h1 .live-word{letter-spacing:6px;margin-top:6px}
+ .subtitle{font-size:10px;margin-top:8px}
+ .live-pill{
+  position:absolute;
+  top:8px;left:0;
+  margin:0;
+  font-size:10px;
+  padding:7px 9px;
+ }
+ .hero{padding-top:13px}
+ .hero h2{font-size:21px}
+ .hero p{font-size:11px}
+ .toolbar{padding:9px}
+ .filters{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  width:100%;
+  gap:7px;
+ }
+ .filter{min-width:0;padding:10px 7px;font-size:12px}
+ .filter-symbol{font-size:23px}
+ .count{font-size:12px}
+ .match{
+  grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);
+  gap:10px;
+  padding:12px 10px;
+  min-height:0;
+ }
+ .league-block{gap:7px}
+ .league-symbol{width:35px;height:35px;flex-basis:35px;font-size:16px}
+ .league-name{font-size:11px}
+ .league-sub{font-size:10px}
+ .teams{gap:6px}
+ .team{font-size:13px}
+ .vs{font-size:15px}
+ .time-block{
+  grid-column:1/-1;
+  border:0;
+  border-top:1px solid #46516b;
+  padding:9px 0 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+ }
+ .time{font-size:21px}
+ .date{font-size:11px;margin:0}
+ .status{margin:0;font-size:10px}
+ .watch-wrap{grid-column:1/-1}
+ .watch{font-size:12px;padding:10px}
+}
 </style>
 </head>
+
 <body>
 <header>
  <div class="wrap top">
   <div class="brand">
    <div class="cheetah" role="img" aria-label="صورة فهد حقيقي"></div>
    <div class="brand-copy">
-    <h1><span class="the">THE</span><span class="cheetah-word">CHEETAH</span><span class="live-word">LIVE</span></h1>
+    <h1>
+     <span class="the">THE</span>
+     <span class="cheetah-word">CHEETAH</span>
+     <span class="live-word">LIVE</span>
+    </h1>
     <p class="subtitle">مدرج الفهد — وجهتك لمتابعة المباريات</p>
    </div>
   </div>
   <div class="live-pill"><i></i> تغطية المباريات</div>
  </div>
 </header>
+
 <main class="wrap">
  <section class="hero">
   <h2>مدرج واحد لكل المباريات — <span>اختر وشاهد</span></h2>
   <p>جدول المباريات وروابط المشاهدة في مكان واحد. تتحدث القائمة من قاعدة بيانات الموقع.</p>
  </section>
+
  <section class="toolbar" aria-label="تصفية المباريات">
   <div class="filters">
-   <button class="filter active" data-filter="all" type="button">▦ كل المباريات</button>
-   <button class="filter" data-filter="live" type="button">◉ مباشر</button>
-   <button class="filter" data-filter="upcoming" type="button">◷ قادمة</button>
-   <button class="filter" data-filter="finished" type="button">⚑ انتهت</button>
+   <button class="filter active" data-filter="all" type="button">
+    <span class="filter-symbol">▦</span> كل المباريات
+   </button>
+   <button class="filter" data-filter="live" type="button">
+    <span class="filter-symbol">◉</span> مباشر
+   </button>
+   <button class="filter" data-filter="upcoming" type="button">
+    <span class="filter-symbol">◷</span> قادمة
+   </button>
+   <button class="filter" data-filter="finished" type="button">
+    <span class="filter-symbol">⚑</span> انتهت
+   </button>
   </div>
   <div class="count" id="count">جارٍ تحميل المباريات…</div>
  </section>
+
  <div id="message" class="message" role="status">جارٍ الاتصال بقاعدة البيانات…</div>
  <section id="matches" class="matches" aria-live="polite"></section>
 </main>
-<footer>© <span id="year"></span> <span class="footer-cheetah">♧</span> مدرج الفهد Live — جميع الحقوق محفوظة</footer>
+
+<footer>
+ © <span id="year"></span>
+ <span class="footer-cheetah">♧</span>
+ مدرج الفهد Live — جميع الحقوق محفوظة
+</footer>
+
 <script>
 'use strict';
+
 const SUPABASE_URL='https://mksjdavhrbtorkqoocez.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_Ql5GPUQvGkh6oKwcoG7i7w_8K2DUX6s';
+
 const message=document.getElementById('message');
 const matchesEl=document.getElementById('matches');
 const countEl=document.getElementById('count');
 const filters=document.querySelectorAll('.filter');
+
 let allMatches=[];
 let currentFilter='all';
+
 document.getElementById('year').textContent=new Date().getFullYear();
 
 function normalizeStatus(value){
@@ -157,20 +528,33 @@ function normalizeStatus(value){
  if(['finished','ended','انتهت','منتهية','completed'].includes(s))return 'finished';
  return 'upcoming';
 }
+
 function statusLabel(s){
  if(s==='live')return '● مباشر';
  if(s==='finished')return 'انتهت';
  return '◷ قادمة';
 }
+
 function dateParts(value){
  if(!value)return {time:'--:--',date:'موعد غير محدد'};
+
  const d=new Date(value);
  if(Number.isNaN(d.getTime()))return {time:String(value),date:''};
+
  return {
-  time:new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false}).format(d),
-  date:new Intl.DateTimeFormat('ar-SA',{day:'numeric',month:'long',year:'numeric'}).format(d)
+  time:new Intl.DateTimeFormat('en-US',{
+   hour:'2-digit',
+   minute:'2-digit',
+   hour12:true
+  }).format(d),
+  date:new Intl.DateTimeFormat('ar-SA',{
+   day:'numeric',
+   month:'long',
+   year:'numeric'
+  }).format(d)
  };
 }
+
 function leagueIcon(name){
  const s=String(name||'').toLowerCase();
  if(s.includes('روشن')||s.includes('سعود'))return '◉';
@@ -180,58 +564,132 @@ function leagueIcon(name){
  if(s.includes('إيطالي'))return '◆';
  return '⚽';
 }
+
 function render(){
  const shown=allMatches.filter(m=>currentFilter==='all'||m.status===currentFilter);
+
  countEl.innerHTML='عدد المباريات: <strong>'+shown.length+'</strong>';
  matchesEl.replaceChildren();
+
  if(!shown.length){
   message.classList.remove('hidden','error');
-  message.textContent=allMatches.length?'ما فيه مباريات ضمن هذا التصنيف حاليًا.':'ما فيه مباريات محفوظة حاليًا.';
+  message.textContent=allMatches.length
+   ?'ما فيه مباريات ضمن هذا التصنيف حاليًا.'
+   :'ما فيه مباريات محفوظة حاليًا.';
   return;
  }
- message.classList.add('hidden');message.classList.remove('error');
+
+ message.classList.add('hidden');
+ message.classList.remove('error');
+
  shown.forEach(m=>{
   const card=document.createElement('article');
   card.className='match'+(m.status==='live'?' is-live':'');
-  const leagueBlock=document.createElement('div');leagueBlock.className='league-block';
-  const symbol=document.createElement('div');symbol.className='league-symbol';symbol.textContent=leagueIcon(m.league);
+
+  const leagueBlock=document.createElement('div');
+  leagueBlock.className='league-block';
+
+  const symbol=document.createElement('div');
+  symbol.className='league-symbol';
+  symbol.textContent=leagueIcon(m.league);
+
   const leagueInfo=document.createElement('div');
-  const league=document.createElement('div');league.className='league-name';league.textContent=m.league||'مباراة';
-  const sub=document.createElement('div');sub.className='league-sub';sub.textContent='مدرج الفهد Live';
-  leagueInfo.append(league,sub);leagueBlock.append(symbol,leagueInfo);
-  const teams=document.createElement('div');teams.className='teams';
-  const home=document.createElement('div');home.className='team';home.textContent=m.home||'الفريق الأول';
-  const vs=document.createElement('div');vs.className='vs';vs.textContent='VS';
-  const away=document.createElement('div');away.className='team';away.textContent=m.away||'الفريق الثاني';
+
+  const league=document.createElement('div');
+  league.className='league-name';
+  league.textContent=m.league||'مباراة';
+
+  const sub=document.createElement('div');
+  sub.className='league-sub';
+  sub.textContent='مدرج الفهد Live';
+
+  leagueInfo.append(league,sub);
+  leagueBlock.append(symbol,leagueInfo);
+
+  const teams=document.createElement('div');
+  teams.className='teams';
+
+  const home=document.createElement('div');
+  home.className='team';
+  home.textContent=m.home||'الفريق الأول';
+
+  const vs=document.createElement('div');
+  vs.className='vs';
+  vs.textContent='VS';
+
+  const away=document.createElement('div');
+  away.className='team';
+  away.textContent=m.away||'الفريق الثاني';
+
   teams.append(home,vs,away);
-  const timeBlock=document.createElement('div');timeBlock.className='time-block';
+
+  const timeBlock=document.createElement('div');
+  timeBlock.className='time-block';
+
   const dt=dateParts(m.match_time);
-  const time=document.createElement('div');time.className='time';time.textContent=dt.time;
-  const date=document.createElement('div');date.className='date';date.textContent=dt.date;
-  const badge=document.createElement('span');badge.className='status '+m.status;badge.textContent=statusLabel(m.status);
+
+  const time=document.createElement('div');
+  time.className='time';
+  time.textContent=dt.time;
+
+  const date=document.createElement('div');
+  date.className='date';
+  date.textContent=dt.date;
+
+  const badge=document.createElement('span');
+  badge.className='status '+m.status;
+  badge.textContent=statusLabel(m.status);
+
   timeBlock.append(time,date,badge);
-  const watchWrap=document.createElement('div');watchWrap.className='watch-wrap';
-  const watch=document.createElement('button');watch.className='watch';watch.type='button';
-  watch.textContent=m.stream?(m.status==='live'?'مشاهدة الآن  ▶':'مشاهدة المباراة  ▶'):'رابط المشاهدة غير متوفر';
+
+  const watchWrap=document.createElement('div');
+  watchWrap.className='watch-wrap';
+
+  const watch=document.createElement('button');
+  watch.className='watch';
+  watch.type='button';
+
+  watch.textContent=m.stream
+   ?(m.status==='live'?'مشاهدة الآن  ▶':'مشاهدة المباراة  ▶')
+   :'رابط المشاهدة غير متوفر';
+
   watch.disabled=!m.stream;
-  if(m.stream)watch.addEventListener('click',()=>{
-   try{const u=new URL(m.stream);if(!['http:','https:'].includes(u.protocol))throw new Error();window.open(u.href,'_blank','noopener,noreferrer');}
-   catch{alert('رابط المشاهدة غير صحيح. يرجى إبلاغ إدارة الموقع.');}
-  });
-  watchWrap.append(watch);card.append(leagueBlock,teams,timeBlock,watchWrap);matchesEl.append(card);
+
+  if(m.stream){
+   watch.addEventListener('click',()=>{
+    try{
+     const u=new URL(m.stream);
+     if(!['http:','https:'].includes(u.protocol))throw new Error();
+     window.open(u.href,'_blank','noopener,noreferrer');
+    }catch{
+     alert('رابط المشاهدة غير صحيح. يرجى إبلاغ إدارة الموقع.');
+    }
+   });
+  }
+
+  watchWrap.append(watch);
+  card.append(leagueBlock,teams,timeBlock,watchWrap);
+  matchesEl.append(card);
  });
 }
+
 filters.forEach(b=>b.addEventListener('click',()=>{
  filters.forEach(x=>x.classList.toggle('active',x===b));
- currentFilter=b.dataset.filter;render();
+ currentFilter=b.dataset.filter;
+ render();
 }));
+
 async function loadMatches(){
  const controller=new AbortController();
  const timeout=setTimeout(()=>controller.abort(),15000);
+
  message.classList.remove('hidden','error');
  message.textContent='جارٍ الاتصال بقاعدة البيانات…';
+
  try{
-  const endpoint=SUPABASE_URL+'/rest/v1/matches?select=id,home,away,league,match_time,status,stream&order=match_time.asc.nullsfirst';
+  const endpoint=SUPABASE_URL+
+   '/rest/v1/matches?select=id,home,away,league,match_time,status,stream&order=match_time.asc.nullsfirst';
+
   const response=await fetch(endpoint,{
    method:'GET',
    mode:'cors',
@@ -242,15 +700,25 @@ async function loadMatches(){
     'Accept':'application/json'
    }
   });
+
   const body=await response.text();
   let data;
-  try{data=body?JSON.parse(body):[];}
-  catch{throw new Error('استجابة قاعدة البيانات ليست بصيغة JSON.');}
+
+  try{
+   data=body?JSON.parse(body):[];
+  }catch{
+   throw new Error('استجابة قاعدة البيانات ليست بصيغة JSON.');
+  }
+
   if(!response.ok){
    const detail=(data&&data.message)||('HTTP '+response.status);
    throw new Error(detail);
   }
-  if(!Array.isArray(data))throw new Error('صيغة بيانات المباريات غير متوقعة.');
+
+  if(!Array.isArray(data)){
+   throw new Error('صيغة بيانات المباريات غير متوقعة.');
+  }
+
   allMatches=data.map(row=>({
    id:row.id,
    home:row.home,
@@ -260,12 +728,15 @@ async function loadMatches(){
    status:normalizeStatus(row.status),
    stream:typeof row.stream==='string'?row.stream.trim():''
   }));
+
   render();
+
  }catch(error){
   console.error('Matches API error:',error);
   matchesEl.replaceChildren();
   message.classList.remove('hidden');
   message.classList.add('error');
+
   if(error.name==='AbortError'){
    message.textContent='انتهت مهلة الاتصال بقاعدة البيانات. تحقق من الإنترنت ثم حدّث الصفحة.';
   }else if(error instanceof TypeError){
@@ -273,14 +744,19 @@ async function loadMatches(){
   }else{
    message.textContent='تعذر تحميل المباريات: '+(error.message||'خطأ غير معروف');
   }
+
   countEl.textContent='تعذر تحميل البيانات';
+
  }finally{
   clearTimeout(timeout);
  }
 }
+
 loadMatches();
-/* مزامنة تلقائية كل دقيقة، مع تجنب تعدد الطلبات */
+
+/* مزامنة تلقائية كل دقيقة */
 setInterval(loadMatches,60000);
 </script>
 </body>
-   </html>
+ </html>
+    
