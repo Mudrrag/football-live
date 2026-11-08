@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080d10">
+<meta name="theme-color" content="#080D10">
 <meta name="description" content="مدرج الفهد Live — جدول المباريات وروابط المشاهدة">
 <title>مدرج الفهد Live | The Cheetah</title>
 
 <style>
 :root{
- --bg:#080d10;
- --panel:#11191b;
- --line:#344447;
+ --bg:#080D10;
+ --panel:#10191B;
+ --line:#29413E;
  --accent:#00D6B8;
- --accent2:#A7F2E6;
- --gold:#B9C9C6;
- --text:#F2F5F4;
- --muted:#A4B0AE;
+ --accent2:#C2FFF5;
+ --silver:#C2D0CD;
+ --text:#F3F7F6;
+ --muted:#9EAFAB;
  --red:#FF424B;
 }
 
@@ -26,9 +26,9 @@ body{
  margin:0;
  min-height:100vh;
  background:
- radial-gradient(ellipse at 50% 0%,#18312e 0,transparent 53%),
- radial-gradient(ellipse at 90% 45%,#142b2b 0,transparent 45%),
- linear-gradient(180deg,#080d10,#10191a 55%,#090f11);
+ radial-gradient(ellipse at 50% 0%,#123A35 0,transparent 48%),
+ radial-gradient(ellipse at 90% 45%,#102522 0,transparent 42%),
+ linear-gradient(180deg,#080D10,#0D1718 55%,#080D10);
  background-color:var(--bg);
  color:var(--text);
  font-family:Tahoma,Arial,sans-serif;
@@ -39,16 +39,16 @@ body{
 header{
  position:relative;
  overflow:hidden;
- border-bottom:1px solid #263c3a;
- background:rgba(8,13,16,.91);
+ border-bottom:1px solid #24433E;
+ background:rgba(8,13,16,.96);
 }
 
 header:after{
  content:"";
  position:absolute;
- bottom:0;left:0;right:0;height:2px;
- background:linear-gradient(90deg,transparent,#00D6B8,#A7F2E6,#B9C9C6,transparent);
- opacity:.9;
+ bottom:0;left:0;right:0;height:3px;
+ background:linear-gradient(90deg,transparent,#00D6B8,#C2FFF5,#00D6B8,transparent);
+ opacity:1;
 }
 
 .top{
@@ -66,23 +66,23 @@ header:after{
  width:clamp(145px,29vw,390px);
  height:260px;
  flex:0 0 auto;
- background-color:#11191b;
+ background-color:#10191B;
  background-position:center 35%;
  background-size:cover;
  background-repeat:no-repeat;
  background-image:url("./cheetah.webp");
  mask-image:linear-gradient(90deg,#000 70%,transparent 100%);
  -webkit-mask-image:linear-gradient(90deg,#000 70%,transparent 100%);
- filter:contrast(1.08) saturate(.88);
+ filter:contrast(1.12) saturate(.82);
 }
 
 .brand-copy{
- border-right:1px solid var(--gold);
+ border-right:2px solid var(--accent);
  padding:8px 0 8px 22px;
 }
 
 .eyebrow{
- color:var(--gold);
+ color:var(--accent);
  font-size:clamp(12px,1.5vw,19px);
  letter-spacing:6px;
  font-weight:700;
@@ -103,12 +103,12 @@ header:after{
 .brand h1 .the{
  display:block;
  font-size:.34em;
- color:var(--gold);
+ color:var(--silver);
  letter-spacing:7px;
  margin-bottom:9px;
 }
 
-.brand h1 .cheetah-word{display:block;color:#F2F5F4}
+.brand h1 .cheetah-word{display:block;color:#F3F7F6}
 
 .brand h1 .live-word{
  display:block;
@@ -120,28 +120,29 @@ header:after{
 
 .subtitle{
  font-size:clamp(11px,1.4vw,16px);
- color:#AEBBB8;
+ color:#AEBDB9;
  margin:14px 0 0;
 }
 
 .live-pill{
  align-self:flex-start;
  margin-top:28px;
- border:1px solid #35534F;
+ border:1px solid #315B53;
  border-radius:30px;
  padding:11px 17px;
  font-size:13px;
  white-space:nowrap;
- background:#111D1DB8;
+ background:#10201E;
+ color:#D8E7E3;
 }
 
 .live-pill i{
  display:inline-block;
  width:10px;height:10px;
  border-radius:50%;
- background:var(--accent2);
+ background:var(--accent);
  margin-left:8px;
- box-shadow:0 0 13px #A7F2E6;
+ box-shadow:0 0 13px #00D6B8;
 }
 
 main{padding-bottom:28px}
@@ -169,11 +170,11 @@ main{padding-bottom:28px}
  gap:14px;
  flex-wrap:wrap;
  padding:12px 14px;
- border:1px solid #354744;
+ border:1px solid #31504B;
  border-radius:18px;
- background:linear-gradient(135deg,#151f20,#111b1c);
+ background:linear-gradient(135deg,#14211F,#10191B);
  margin:10px 0 5px;
- box-shadow:0 8px 28px #03090955;
+ box-shadow:0 8px 28px #02080780;
 }
 
 .filters{display:flex;gap:9px;flex-wrap:wrap}
@@ -183,9 +184,9 @@ button{font:inherit;cursor:pointer}
 .filter{
  min-width:112px;
  padding:12px 17px;
- border:1px solid #405451;
- background:#192625;
- color:#E7EFED;
+ border:1px solid #36504B;
+ background:#172522;
+ color:#E7F0ED;
  border-radius:13px;
  display:inline-flex;
  align-items:center;
@@ -203,14 +204,17 @@ button{font:inherit;cursor:pointer}
 }
 
 .filter.active{
- color:#A7F2E6;
- border-color:#00A991;
- background:linear-gradient(135deg,#173D37,#203633);
+ color:#C2FFF5;
+ border-color:#00D6B8;
+ background:linear-gradient(135deg,#07594D,#123D36);
  font-weight:800;
- box-shadow:0 0 16px #00D6B822,inset 0 0 12px #00D6B811;
+ box-shadow:0 0 18px #00D6B833,inset 0 0 12px #00D6B822;
 }
 
-.filter:hover{border-color:var(--accent)}
+.filter:hover{
+ border-color:var(--accent);
+ color:var(--accent2);
+}
 
 .count{color:#D6E0DD;font-size:13px}
 .count strong{color:var(--accent);font-size:19px}
@@ -218,9 +222,9 @@ button{font:inherit;cursor:pointer}
 .message{
  padding:15px 17px;
  margin:10px 0;
- border:1px solid #3D504D;
+ border:1px solid #36504B;
  border-radius:13px;
- background:#151F20;
+ background:#14201E;
  color:var(--muted);
  line-height:1.8;
  font-size:14px;
@@ -242,16 +246,16 @@ button{font:inherit;cursor:pointer}
  gap:16px;
  min-height:108px;
  padding:13px 18px;
- background:linear-gradient(110deg,#111B1C,#192625 52%,#11191B);
- border:1px solid #354744;
+ background:linear-gradient(110deg,#101A1A,#142321 52%,#10191B);
+ border:1px solid #304843;
  border-radius:16px;
  transition:border-color .2s,box-shadow .2s;
- box-shadow:0 5px 18px #03090935;
+ box-shadow:0 5px 18px #02080760;
 }
 
 .match:hover{
- border-color:#00A991;
- box-shadow:0 0 18px #00D6B81B;
+ border-color:#00D6B8;
+ box-shadow:0 0 20px #00D6B829;
 }
 
 .match.is-live{border-right:3px solid var(--red)}
@@ -264,8 +268,8 @@ button{font:inherit;cursor:pointer}
  border-radius:50%;
  display:grid;
  place-items:center;
- background:linear-gradient(145deg,#253A37,#172B29);
- border:1px solid #526B65;
+ background:linear-gradient(145deg,#17443C,#102722);
+ border:1px solid #39776A;
  color:var(--accent2);
  font-size:22px;
  font-weight:900;
@@ -278,7 +282,7 @@ button{font:inherit;cursor:pointer}
  overflow-wrap:anywhere;
 }
 
-.league-sub{font-size:11px;color:#A5B5B0;margin-top:3px}
+.league-sub{font-size:11px;color:#A5B8B2;margin-top:3px}
 
 .teams{
  display:grid;
@@ -298,15 +302,15 @@ button{font:inherit;cursor:pointer}
 
 .vs{
  font:900 clamp(18px,2.2vw,28px)/1 Arial,sans-serif;
- color:var(--accent2);
+ color:var(--accent);
  direction:ltr;
 }
 
 .time-block{
  text-align:center;
  padding:2px 13px;
- border-right:1px solid #405451;
- border-left:1px solid #405451;
+ border-right:1px solid #36504B;
+ border-left:1px solid #36504B;
  min-width:0;
 }
 
@@ -316,7 +320,7 @@ button{font:inherit;cursor:pointer}
  white-space:nowrap;
 }
 
-.date{font-size:12px;color:var(--gold);margin-top:4px;line-height:1.7}
+.date{font-size:12px;color:var(--silver);margin-top:4px;line-height:1.7}
 
 .status{
  display:inline-flex;
@@ -325,10 +329,10 @@ button{font:inherit;cursor:pointer}
  gap:6px;
  margin-top:5px;
  padding:4px 11px;
- border:1px solid #47776D;
+ border:1px solid #34796B;
  border-radius:20px;
- color:#A7F2E6;
- background:#17332E;
+ color:#B5FFF1;
+ background:#123B32;
  font-size:11px;
  font-weight:800;
  white-space:nowrap;
@@ -348,18 +352,22 @@ button{font:inherit;cursor:pointer}
 
 .watch{
  width:100%;
- border:1px solid #00A991;
+ border:1px solid #00D6B8;
  border-radius:11px;
- background:linear-gradient(110deg,#087F70,#00A991);
+ background:linear-gradient(110deg,#087F70,#00B99D);
  color:#FFFFFF;
  font-size:13px;
  font-weight:900;
  padding:13px 10px;
- box-shadow:0 4px 15px #00A9912B;
+ box-shadow:0 4px 16px #00D6B833;
  transition:filter .2s,transform .2s;
 }
 
-.watch:hover{filter:brightness(1.13);transform:translateY(-1px)}
+.watch:hover{
+ filter:brightness(1.16);
+ transform:translateY(-1px);
+ box-shadow:0 5px 20px #00D6B84D;
+}
 
 .watch:disabled{
  background:#252D2D;
@@ -370,14 +378,14 @@ button{font:inherit;cursor:pointer}
 }
 
 footer{
- border-top:1px solid #344441;
+ border-top:1px solid #29423D;
  text-align:center;
  padding:18px 0 25px;
  color:#AAB8B4;
  font-size:12px;
 }
 
-.footer-cheetah{color:var(--gold);margin:0 7px}
+.footer-cheetah{color:var(--accent);margin:0 7px}
 .hidden{display:none!important}
 
 @media(max-width:900px){
@@ -436,7 +444,7 @@ footer{
  .time-block{
   grid-column:1/-1;
   border:0;
-  border-top:1px solid #405451;
+  border-top:1px solid #36504B;
   padding:9px 0 0;
   display:flex;
   align-items:center;
