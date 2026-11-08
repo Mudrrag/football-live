@@ -344,7 +344,7 @@ button{font:inherit;cursor:pointer}
  border-color:#566361;
 }
 
-/* زر مشاهدة الآن - تصميم وجه الفهد رقم 4 */
+/* زر المشاهدة - تصميم جلد الفهد ووجهه الحقيقي */
 .watch{
  position:relative;
  isolation:isolate;
@@ -370,7 +370,7 @@ button{font:inherit;cursor:pointer}
  transition:filter .2s,transform .2s;
 }
 
-/* وجه الفهد على الطرف الأيمن */
+/* صورة وجه الفهد الحقيقي من cheetah.webp */
 .watch:after{
  content:"";
  position:absolute;
@@ -379,16 +379,22 @@ button{font:inherit;cursor:pointer}
  right:5px;
  transform:translateY(-50%);
  width:66px;
- height:54px;
- opacity:.96;
+ height:52px;
+ border-radius:9px;
+ border:1px solid #D8B36F;
+ opacity:1;
  pointer-events:none;
+ background-color:#342619;
+ background-image:
+ linear-gradient(180deg,#00000008,#00000035),
+ url("./cheetah.webp");
  background-repeat:no-repeat;
- background-position:center;
- background-size:contain;
- background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23241910' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 37 10 13 35 22 Q50 13 65 22 L90 13 81 39 Q91 57 76 77 Q63 91 50 94 Q37 91 24 77 Q9 57 19 37Z'/%3E%3Cpath d='M25 42 Q36 31 47 43 Q37 53 25 42Z M53 43 Q64 31 75 42 Q63 53 53 43Z'/%3E%3Cpath d='M34 45 40 44 M60 44 66 45 M43 62 Q50 54 57 62 L50 69Z'/%3E%3Cpath d='M50 69 Q44 79 36 75 M50 69 Q56 79 64 75 M35 58 18 55 M35 64 17 66 M65 58 82 55 M65 64 83 66'/%3E%3C/g%3E%3Cg fill='%23241910'%3E%3Cellipse cx='21' cy='32' rx='3' ry='4'/%3E%3Cellipse cx='79' cy='32' rx='3' ry='4'/%3E%3Ccircle cx='30' cy='19' r='2.5'/%3E%3Ccircle cx='70' cy='19' r='2.5'/%3E%3Ccircle cx='15' cy='45' r='2.5'/%3E%3Ccircle cx='85' cy='45' r='2.5'/%3E%3C/g%3E%3C/svg%3E");
+ background-size:cover;
+ background-position:center 35%;
+ box-shadow:0 2px 9px #00000070;
 }
 
-/* مساحة داكنة مستقلة لعبارة المشاهدة */
+/* المساحة الداكنة لعبارة المشاهدة */
 .watch:before{
  content:"";
  position:absolute;
@@ -519,7 +525,10 @@ footer{
   padding:10px 78px 10px 12px;
   min-height:54px;
  }
- .watch:after{width:60px;height:49px}
+ .watch:after{
+  width:60px;
+  height:48px;
+ }
 }
 </style>
 </head>
