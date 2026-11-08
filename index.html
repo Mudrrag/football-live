@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#020806">
+<meta name="theme-color" content="#0b1118">
 <meta name="description" content="مدرج الفهد Live — جدول المباريات وروابط المشاهدة">
 <title>مدرج الفهد Live | The Cheetah</title>
 <style>
@@ -16,7 +15,7 @@ header{position:relative;overflow:hidden;border-bottom:1px solid #17281e;backgro
 header:after{content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#00e676,transparent);opacity:.75}
 .top{min-height:300px;display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative}
 .brand{display:flex;align-items:center;gap:25px;min-width:0}
-.cheetah{width:clamp(145px,29vw,390px);height:260px;flex:0 0 auto;background-color:#07100c;background-position:center;background-size:contain;background-repeat:no-repeat;background-image:url("cheetah.webp");background-size:cover;background-position:center 35%;mask-image:linear-gradient(90deg,#000 70%,transparent 100%);-webkit-mask-image:linear-gradient(90deg,#000 70%,transparent 100%);filter:contrast(1.08) saturate(.88)}
+.cheetah{width:clamp(145px,29vw,390px);height:260px;flex:0 0 auto;background-color:#07100c;background-position:center;background-size:contain;background-repeat:no-repeat;background-image:url("./cheetah.webp");background-size:cover;background-position:center 35%;mask-image:linear-gradient(90deg,#000 70%,transparent 100%);-webkit-mask-image:linear-gradient(90deg,#000 70%,transparent 100%);filter:contrast(1.08) saturate(.88)}
 .brand-copy{border-right:1px solid #a87b31;padding:8px 0 8px 22px}
 .eyebrow{color:#d6aa52;font-size:clamp(12px,1.5vw,19px);letter-spacing:6px;font-weight:700;margin:0 0 5px}
 .brand h1{font-family:Arial,Tahoma,sans-serif;direction:ltr;text-align:right;line-height:.93;font-size:clamp(34px,6.2vw,82px);letter-spacing:1px;margin:0;font-weight:900}
@@ -63,6 +62,50 @@ footer{border-top:1px solid #1b2a20;text-align:center;padding:18px 0 25px;color:
 .hidden{display:none!important}
 @media(max-width:900px){.top{min-height:235px}.cheetah{height:220px;width:clamp(125px,27vw,250px)}.brand{gap:12px}.match{grid-template-columns:minmax(140px,.8fr) minmax(240px,1.5fr) minmax(125px,.75fr)}.watch-wrap{grid-column:1/-1}.watch{padding:10px}.time-block{border-left:0}}
 @media(max-width:620px){.wrap{width:94%}.top{min-height:190px;align-items:center;gap:5px}.brand{gap:3px}.cheetah{width:115px;height:170px}.brand-copy{padding:4px 10px 4px 0}.brand h1{font-size:clamp(27px,8vw,39px)}.brand h1 .the{letter-spacing:4px;margin-bottom:6px}.brand h1 .live-word{letter-spacing:6px;margin-top:6px}.subtitle{font-size:10px;margin-top:8px}.live-pill{position:absolute;top:8px;left:0;margin:0;font-size:10px;padding:7px 9px}.hero{padding-top:13px}.hero h2{font-size:21px}.hero p{font-size:11px}.toolbar{padding:9px}.filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:7px}.filter{min-width:0;padding:10px 7px;font-size:12px}.count{font-size:12px}.match{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:10px;padding:12px 10px;min-height:0}.league-block{gap:7px}.league-symbol{width:35px;height:35px;flex-basis:35px;font-size:16px}.league-name{font-size:11px}.league-sub{font-size:10px}.teams{gap:6px}.team{font-size:13px}.vs{font-size:15px}.time-block{grid-column:1/-1;border:0;border-top:1px solid #242f28;padding:9px 0 0;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}.time{font-size:21px}.date{font-size:11px;margin:0}.status{margin:0;font-size:10px}.watch-wrap{grid-column:1/-1}.watch{font-size:12px;padding:10px}}
+
+/* ألوان جديدة: فحمي هادئ مع تركواز واضح */
+:root{
+ --bg:#0b1118;
+ --panel:#121d27;
+ --line:#2a3a48;
+ --green:#35d6c2;
+ --green2:#a9eee4;
+ --text:#edf3f6;
+ --muted:#9aabb8;
+ --red:#ff5967;
+}
+body{
+ background:radial-gradient(ellipse at 50% 0,#18313b 0,transparent 55%),linear-gradient(180deg,#0b1118,#101923);
+ background-color:#0b1118;
+}
+header{border-bottom-color:#263846;background:rgba(11,17,24,.90)}
+header:after{background:linear-gradient(90deg,transparent,#35d6c2,transparent)}
+.brand-copy{border-right-color:#7893a2}
+.eyebrow,.brand h1 .the{color:#b7c9d3}
+.brand h1 .live-word,.hero h2 span,.count strong,.date,.footer-cheetah{color:var(--green)}
+.subtitle{color:#a2b2bd}
+.live-pill{border-color:#344653;background:#101a23b8}
+.live-pill i{background:var(--green);box-shadow:0 0 12px #35d6c2}
+.toolbar{border-color:#2a3a48;background:#121c26}
+.filter{border-color:#344653;background:#17232e;color:#dce7ec}
+.filter.active{color:var(--green);border-color:#258f86;background:#102b30}
+.message{border-color:#304650;background:#13232b;color:var(--muted)}
+.message.error{color:#ffc0c5;border-color:#87434c}
+.match{background:linear-gradient(100deg,#111b25,#16232d 52%,#101a23);border-color:#2b3b48}
+.match:hover{border-color:#398f89}
+.match.is-live{border-right-color:#e65361}
+.league-symbol{background:#172630;border-color:#3b505d;color:var(--green)}
+.league-sub{color:#9aabb8}
+.vs{color:#35d6c2}
+.time-block{border-right-color:#3a4b57;border-left-color:#3a4b57}
+.status{border-color:#287d75;color:#8ce9dc;background:#102b2d}
+.status.live{color:#ff8791;background:#32171e;border-color:#8b3945}
+.status.finished{color:#c2cdd3;background:#202a32;border-color:#4b5a64}
+.watch{border-color:#278f83;background:linear-gradient(110deg,#176b66,#168f83);color:#f3fffd}
+.watch:disabled{background:#202a32;border-color:#3b4a54;color:#98a8b1}
+footer{border-top-color:#293a46;color:#a1b0ba}
+@media(max-width:900px){.time-block{border-left-color:transparent}}
+@media(max-width:620px){.time-block{border-top-color:#344653}}
 </style>
 </head>
 <body>
@@ -240,4 +283,4 @@ loadMatches();
 setInterval(loadMatches,60000);
 </script>
 </body>
-</html>
+   </html>
