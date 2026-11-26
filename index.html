@@ -33,10 +33,6 @@ header{padding:22px 0 12px}
 .section-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:28px 0 15px}
 .section-heading h2{font-size:19px;margin:0;color:var(--gold2)}
 .section-heading small{color:var(--muted);font-size:12px}
-.featured{border:1px solid rgba(198,166,107,.4);border-radius:20px;padding:19px;background:linear-gradient(135deg,rgba(198,166,107,.10),transparent 65%),var(--panel)}
-.featured-teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;text-align:center}
-.featured-team{min-width:0;font-size:16px;font-weight:900;overflow-wrap:anywhere}
-.featured-vs{color:var(--gold);font-size:13px;font-weight:900}
 .team-logo{width:68px;height:68px;object-fit:contain;display:block;margin:0 auto 10px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.4))}
 .logo-fallback{width:68px;height:68px;border:1px solid var(--border);border-radius:50%;background:linear-gradient(145deg,#24251d,#10110e);color:var(--gold2);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:19px;font-weight:900}
 .match-info{text-align:center;margin-top:22px;padding:17px 10px 5px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px}
@@ -68,7 +64,7 @@ header{padding:22px 0 12px}
 .card-time{font-size:15px;font-weight:900;color:var(--gold2);text-align:center;line-height:1.8}
 .watch-btn{display:inline-block;text-decoration:none;background:linear-gradient(135deg,#e3c68e,#b58e4e);color:#17130b;font-weight:900;font-size:12px;padding:9px 18px;border-radius:9px}
 .watch-btn.disabled{background:#282a24;color:#777;pointer-events:none}
-.empty,.empty-state{text-align:center;padding:35px 15px;background:var(--panel);border:1px dashed var(--border);border-radius:16px;color:var(--muted);grid-column:1/-1;line-height:2}
+.empty,.empty-state{ text-align:center;padding:35px 15px;background:var(--panel);border:1px dashed var(--border);border-radius:16px;color:var(--muted);grid-column:1/-1;line-height:2}
 .loading{text-align:center;color:var(--gold);padding:30px;grid-column:1/-1}
 .error{color:#ff8585}
 .no-stream{color:var(--muted);font-size:12px}
@@ -95,8 +91,6 @@ footer strong{color:var(--gold)}
     <p>وجهتك لمتابعة جدول المباريات وروابط المشاهدة. كل المواجهات في مكان واحد.</p>
   </div>
 </section>
-<div class="section-heading"><h2>⭐ المواجهة الأبرز</h2><small id="featuredDate">بانتظار المباريات</small></div>
-<section class="featured" id="featured"><div style="text-align:center;color:#999;padding:15px">جارٍ تحميل المواجهات...</div></section>
 <div class="section-heading"><h2>جدول المباريات</h2><small id="matchCount">0 مباراة</small></div>
 <div class="search-box"><input id="searchInput" type="search" placeholder="ابحث عن فريق أو بطولة..."></div>
 <div class="filters">
@@ -144,7 +138,12 @@ function teamInitials(name) {
   return escapeHTML(String(name || "?").trim().slice(0,2));
 }
 
-/* أولوية الشعار: اليدوي ثم التلقائي ثم الأحرف المختصرة */
+/*
+  أولوية الشعار:
+  1) الشعار اليدوي المرفوع من صفحة الإدارة.
+  2) الشعار التلقائي المحفوظ/المجلوب من TheSportsDB.
+  3) الأحرف المختصرة عند عدم توفر أي شعار.
+*/
 function teamLogoHTML(name, large = false, manualLogo = "") {
   const key = normalizeName(name);
   const manual = String(manualLogo || "").trim();
@@ -153,8 +152,11 @@ function teamLogoHTML(name, large = false, manualLogo = "") {
   const sizeClass = large ? "team-logo" : "";
   const fallback = `<span class="logo-fallback" style="display:none">${teamInitials(name)}</span>`;
 
-  if (!logo) return `<span class="logo-fallback">${teamInitials(name)}</span>`;
+  if (!logo) {
+    return `<span class="logo-fallback">${teamInitials(name)}</span>`;
+  }
 
+  // إذا تعطل الشعار اليدوي نجرب التلقائي قبل إظهار الأحرف المختصرة.
   const autoFallback = manual && automatic && manual !== automatic ? automatic : "";
 
   return `
@@ -239,41 +241,6 @@ async function loadTeamLogos() {
     if (loaded < names.length) await delay(2100);
   }
   renderMatches();
-  renderFeatured();
-}
-
-function getFeaturedMatch() {
-  return allMatches.find(m => getMatchStatus(m.status) === "live") ||
-    allMatches.find(m => getMatchStatus(m.status) === "upcoming");
-}
-function renderFeatured() {
-  const featuredEl = document.getElementById("featured");
-  if (!featuredEl) return;
-  const match = getFeaturedMatch();
-  if (!match) {
-    featuredEl.innerHTML = '<div class="empty">لا توجد مباريات حالياً</div>';
-    document.getElementById("featuredDate").textContent = "لا توجد مباريات";
-    return;
-  }
-  document.getElementById("featuredDate").textContent = statusLabel(match.status);
-  featuredEl.innerHTML = `
-    <div class="featured-teams">
-      <div class="featured-team">
-        ${teamLogoHTML(match.home,true,match.home_logo)}
-        <strong>${escapeHTML(match.home)}</strong>
-      </div>
-      <div class="featured-vs">VS</div>
-      <div class="featured-team">
-        ${teamLogoHTML(match.away,true,match.away_logo)}
-        <strong>${escapeHTML(match.away)}</strong>
-      </div>
-    </div>
-    <div class="match-info">
-      <span class="match-time">${formatMatchTime(match.match_time)}</span>
-      <span class="match-status">${statusLabel(match.status)}</span>
-    </div>
-    ${match.stream ? `<a class="watch-btn" href="${escapeHTML(match.stream)}" target="_blank" rel="noopener noreferrer">مشاهدة المباراة</a>` : ""}
-  `;
 }
 
 function renderMatches() {
@@ -330,7 +297,7 @@ async function loadMatches() {
     if (!response.ok) throw new Error("تعذر تحميل المباريات");
     allMatches = await response.json();
 
-    renderFeatured();
+    // اعرض المباريات وشعاراتها اليدوية فوراً، ثم أحمّل التلقائية كخيار احتياطي.
     renderMatches();
     loadTeamLogos();
   } catch(error) {
