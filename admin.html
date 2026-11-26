@@ -1,652 +1,731 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#090d16">
-  <title>إدارة المباريات | مدرج LIVE</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090d16">
+<title>إدارة المباريات | مدرج LIVE</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --bg:#090d16; --panel:#111827; --panel2:#182235;
+  --line:#28364c; --text:#f3f6fc; --muted:#9baac0;
+  --gold:#e6bd68; --green:#28c783; --red:#ff6677;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:radial-gradient(ellipse at top,#17233a 0,var(--bg) 55%);
+  color:var(--text);font-family:Tahoma,Arial,sans-serif;min-height:100vh
+}
+.container{width:min(100% - 28px,1000px);margin:auto;padding:24px 0 50px}
+header{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  flex-wrap:wrap;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--line)
+}
+.brand{font-size:25px;font-weight:900}
+.brand span{color:var(--gold)}
+.subtitle{color:var(--muted);font-size:13px;margin-top:7px}
+.panel{
+  background:rgba(17,24,39,.96);border:1px solid var(--line);
+  border-radius:18px;padding:20px;margin-bottom:18px;box-shadow:0 12px 35px #0003
+}
+h2{font-size:18px;margin:0 0 18px}
+.muted{color:var(--muted);font-size:13px;line-height:1.8}
+label{display:block;color:#c6d1e2;font-size:13px;margin-bottom:7px}
+input,select{
+  width:100%;min-width:0;padding:13px 12px;background:#0b1220;
+  border:1px solid var(--line);border-radius:10px;color:var(--text);
+  font:inherit;outline:none
+}
+input:focus,select:focus{border-color:var(--gold)}
+input[type="datetime-local"]{color-scheme:dark}
+input[type="file"]{font-size:12px;padding:10px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.field{min-width:0}
+.full{grid-column:1/-1}
+button,.link-button{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  border:0;border-radius:10px;padding:12px 16px;font:inherit;
+  font-weight:700;text-decoration:none;cursor:pointer
+}
+button:disabled{opacity:.55;cursor:wait}
+.primary{background:var(--gold);color:#17130a}
+.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.danger{background:#3b1722;color:#ffb0ba}
+.small{padding:8px 11px;font-size:12px}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
+.message{
+  display:none;padding:12px;border-radius:10px;margin:14px 0 0;
+  font-size:13px;line-height:1.8;overflow-wrap:anywhere
+}
+.message.show{display:block}
+.message.error{background:#3b1722;color:#ffc0c8}
+.message.success{background:#103528;color:#a4f3ce}
+.message.info{background:#172b45;color:#c5e1ff}
+.topline{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;flex-wrap:wrap;margin-bottom:15px
+}
+.count{background:#243047;border-radius:30px;padding:6px 12px;color:var(--gold);font-size:13px}
+.match{background:#0b1220;border:1px solid var(--line);border-radius:13px;padding:15px;margin-top:12px}
+.teams{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:800;font-size:16px}
+.vs{color:var(--gold);font-size:12px}
+.details{color:var(--muted);font-size:12px;line-height:2;margin-top:12px;overflow-wrap:anywhere}
+.match-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.hidden{display:none!important}
 
-  <style>
-    :root {
-      --bg: #090d16;
-      --panel: #111827;
-      --panel2: #182235;
-      --line: #28364c;
-      --text: #f3f6fc;
-      --muted: #9baac0;
-      --gold: #e6bd68;
-      --green: #28c783;
-      --red: #ff6677;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      background:
-        radial-gradient(ellipse at top, #17233a 0, var(--bg) 55%);
-      color: var(--text);
-      font-family: Tahoma, Arial, sans-serif;
-      min-height: 100vh;
-    }
-
-    .container {
-      width: min(100% - 28px, 1000px);
-      margin: auto;
-      padding: 24px 0 50px;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .brand { font-size: 25px; font-weight: 900; }
-    .brand span { color: var(--gold); }
-    .subtitle { color: var(--muted); font-size: 13px; margin-top: 7px; }
-
-    .panel {
-      background: rgba(17, 24, 39, .96);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 12px 35px #0003;
-    }
-
-    h2 { font-size: 18px; margin: 0 0 18px; }
-    .muted { color: var(--muted); font-size: 13px; line-height: 1.8; }
-
-    label {
-      display: block;
-      color: #c6d1e2;
-      font-size: 13px;
-      margin-bottom: 7px;
-    }
-
-    input, select {
-      width: 100%;
-      min-width: 0;
-      padding: 13px 12px;
-      background: #0b1220;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      color: var(--text);
-      font: inherit;
-      outline: none;
-    }
-
-    input:focus, select:focus { border-color: var(--gold); }
-
-    input[type="datetime-local"] { color-scheme: dark; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 15px;
-    }
-
-    .field { min-width: 0; }
-    .full { grid-column: 1 / -1; }
-
-    button, .link-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      border: 0;
-      border-radius: 10px;
-      padding: 12px 16px;
-      font: inherit;
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    button:disabled { opacity: .55; cursor: wait; }
-
-    .primary { background: var(--gold); color: #17130a; }
-    .secondary { background: var(--panel2); color: var(--text); border: 1px solid var(--line); }
-    .danger { background: #3b1722; color: #ffb0ba; }
-    .small { padding: 8px 11px; font-size: 12px; }
-    .actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
-
-    .message {
-      display: none;
-      padding: 12px;
-      border-radius: 10px;
-      margin: 14px 0 0;
-      font-size: 13px;
-      line-height: 1.8;
-      overflow-wrap: anywhere;
-    }
-
-    .message.show { display: block; }
-    .message.error { background: #3b1722; color: #ffc0c8; }
-    .message.success { background: #103528; color: #a4f3ce; }
-    .message.info { background: #172b45; color: #c5e1ff; }
-
-    .topline {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 15px;
-    }
-
-    .count {
-      background: #243047;
-      border-radius: 30px;
-      padding: 6px 12px;
-      color: var(--gold);
-      font-size: 13px;
-    }
-
-    .match {
-      background: #0b1220;
-      border: 1px solid var(--line);
-      border-radius: 13px;
-      padding: 15px;
-      margin-top: 12px;
-    }
-
-    .teams {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      font-weight: 800;
-      font-size: 16px;
-    }
-
-    .vs { color: var(--gold); font-size: 12px; }
-    .details { color: var(--muted); font-size: 12px; line-height: 2; margin-top: 12px; overflow-wrap: anywhere; }
-    .match-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-    .hidden { display: none !important; }
-
-    @media (max-width: 540px) {
-      .container { width: min(100% - 20px, 1000px); padding-top: 18px; }
-      .panel { padding: 15px; }
-      .grid { grid-template-columns: 1fr; }
-      .full { grid-column: auto; }
-      .brand { font-size: 22px; }
-      .teams { font-size: 14px; }
-      .actions button { flex: 1; }
-    }
-  </style>
+.logo-fields{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;
+  margin-top:18px;padding:15px;border:1px solid var(--line);
+  border-radius:13px;background:#0b1220
+}
+.logo-box{min-width:0;text-align:center}
+.logo-preview{
+  width:105px;height:105px;margin:10px auto;
+  border:1px dashed #52627a;border-radius:15px;
+  background:#111827;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;color:var(--muted);font-size:12px
+}
+.logo-preview img{width:100%;height:100%;object-fit:contain;padding:7px}
+.logo-hint{font-size:11px;color:var(--muted);line-height:1.7}
+.match-logos{display:flex;align-items:center;gap:9px;margin-top:12px}
+.match-logos img{
+  width:38px;height:38px;object-fit:contain;background:#182235;
+  border:1px solid var(--line);border-radius:9px;padding:3px
+}
+.match-logos span{font-size:11px;color:var(--muted)}
+@media(max-width:540px){
+  .container{width:min(100% - 20px,1000px);padding-top:18px}
+  .panel{padding:15px}
+  .grid{grid-template-columns:1fr}
+  .full{grid-column:auto}
+  .brand{font-size:22px}
+  .teams{font-size:14px}
+  .actions button{flex:1}
+  .logo-fields{gap:9px;padding:10px}
+  .logo-preview{width:85px;height:85px}
+}
+</style>
 </head>
 
 <body>
-  <main class="container">
-    <header>
-      <div>
-        <div class="brand">مدرج <span>LIVE</span></div>
-        <div class="subtitle">لوحة التحكم وإدارة المباريات</div>
+<main class="container">
+<header>
+  <div>
+    <div class="brand">مدرج <span>LIVE</span></div>
+    <div class="subtitle">لوحة التحكم وإدارة المباريات</div>
+  </div>
+  <a class="link-button secondary" href="./index.html">عرض الموقع</a>
+</header>
+
+<section id="loginPanel" class="panel">
+  <h2>تسجيل دخول الإدارة</h2>
+  <p class="muted">سجّل الدخول بحسابك المسجل في Supabase.</p>
+  <form id="loginForm">
+    <div class="grid">
+      <div class="field full">
+        <label for="email">البريد الإلكتروني</label>
+        <input id="email" type="email" autocomplete="username"
+          placeholder="name@example.com" required>
       </div>
-      <a class="link-button secondary" href="./index.html">عرض الموقع</a>
-    </header>
-
-    <section id="loginPanel" class="panel">
-      <h2>تسجيل دخول الإدارة</h2>
-      <p class="muted">سجّل الدخول بحسابك المسجل في Supabase.</p>
-
-      <form id="loginForm">
-        <div class="grid">
-          <div class="field full">
-            <label for="email">البريد الإلكتروني</label>
-            <input id="email" type="email" autocomplete="username"
-              placeholder="name@example.com" required>
-          </div>
-
-          <div class="field full">
-            <label for="password">كلمة المرور</label>
-            <input id="password" type="password"
-              autocomplete="current-password" required>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button id="loginBtn" class="primary" type="submit">دخول إلى اللوحة</button>
-        </div>
-        <div id="loginMsg" class="message" role="status"></div>
-      </form>
-    </section>
-
-    <section id="dashboard" class="hidden">
-      <div class="panel">
-        <div class="topline">
-          <h2 style="margin:0">إضافة مباراة</h2>
-          <button id="logoutBtn" class="secondary small" type="button">تسجيل الخروج</button>
-        </div>
-
-        <p class="muted">أدخل بيانات المباراة، ثم احفظها في قاعدة البيانات.</p>
-
-        <form id="matchForm">
-          <input type="hidden" id="matchId">
-
-          <div class="grid">
-            <div class="field">
-              <label for="home">الفريق المستضيف</label>
-              <input id="home" maxlength="120" required placeholder="مثال: الهلال">
-            </div>
-
-            <div class="field">
-              <label for="away">الفريق الضيف</label>
-              <input id="away" maxlength="120" required placeholder="مثال: النصر">
-            </div>
-
-            <div class="field">
-              <label for="league">البطولة أو الدوري</label>
-              <input id="league" maxlength="150" placeholder="مثال: دوري روشن">
-            </div>
-
-            <div class="field">
-              <label for="match_time">موعد المباراة</label>
-              <input id="match_time" type="datetime-local">
-            </div>
-
-            <div class="field">
-              <label for="status">حالة المباراة</label>
-              <select id="status">
-                <option value="upcoming">لم تبدأ</option>
-                <option value="live">مباشر</option>
-                <option value="finished">انتهت</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="stream">رابط البث</label>
-              <input id="stream" type="url" placeholder="https://example.com">
-            </div>
-          </div>
-
-          <div class="actions">
-            <button id="saveBtn" class="primary" type="submit">حفظ المباراة</button>
-            <button id="cancelEditBtn" class="secondary hidden" type="button">إلغاء التعديل</button>
-            <button id="resetBtn" class="secondary" type="button">مسح الحقول</button>
-          </div>
-          <div id="formMsg" class="message" role="status"></div>
-        </form>
+      <div class="field full">
+        <label for="password">كلمة المرور</label>
+        <input id="password" type="password"
+          autocomplete="current-password" required>
       </div>
+    </div>
+    <div class="actions">
+      <button id="loginBtn" class="primary" type="submit">دخول إلى اللوحة</button>
+    </div>
+    <div id="loginMsg" class="message" role="status"></div>
+  </form>
+</section>
 
-      <div class="panel">
-        <div class="topline">
-          <h2 style="margin:0">المباريات المسجلة</h2>
-          <span id="matchCount" class="count">0 مباراة</span>
-        </div>
+<section id="dashboard" class="hidden">
+<div class="panel">
+  <div class="topline">
+    <h2 style="margin:0">إضافة مباراة</h2>
+    <button id="logoutBtn" class="secondary small" type="button">تسجيل الخروج</button>
+  </div>
+  <p class="muted">أدخل بيانات المباراة واختر شعاري الفريقين من معرض جوالك.</p>
 
-        <button id="refreshBtn" class="secondary small" type="button">تحديث القائمة</button>
-        <div id="listMsg" class="message" role="status"></div>
-        <div id="matchesList" style="margin-top:12px"></div>
+  <form id="matchForm">
+    <input type="hidden" id="matchId">
+    <input type="hidden" id="homeLogoUrl">
+    <input type="hidden" id="awayLogoUrl">
+
+    <div class="grid">
+      <div class="field">
+        <label for="home">الفريق المستضيف</label>
+        <input id="home" maxlength="120" required placeholder="مثال: الهلال">
       </div>
-    </section>
-  </main>
+      <div class="field">
+        <label for="away">الفريق الضيف</label>
+        <input id="away" maxlength="120" required placeholder="مثال: النصر">
+      </div>
+      <div class="field">
+        <label for="league">البطولة أو الدوري</label>
+        <input id="league" maxlength="150" placeholder="مثال: دوري روشن">
+      </div>
+      <div class="field">
+        <label for="match_time">موعد المباراة</label>
+        <input id="match_time" type="datetime-local">
+      </div>
+      <div class="field">
+        <label for="status">حالة المباراة</label>
+        <select id="status">
+          <option value="upcoming">لم تبدأ</option>
+          <option value="live">مباشر</option>
+          <option value="finished">انتهت</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="stream">رابط البث</label>
+        <input id="stream" type="url" placeholder="https://example.com">
+      </div>
+    </div>
 
-  <script>
-    // إعدادات مشروع Supabase
-    const SUPABASE_URL = 'https://mksjdavhrbtorkqoocez.supabase.co';
-    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_Ql5GPUQvGkh6oKwcoG7i7w_8K2DUX6s';
+    <div class="logo-fields">
+      <div class="logo-box">
+        <label for="homeLogoFile">شعار الفريق المستضيف</label>
+        <div id="homeLogoPreview" class="logo-preview">لا يوجد شعار</div>
+        <input id="homeLogoFile" type="file" accept="image/png,image/jpeg,image/webp">
+        <div class="logo-hint">اختر صورة الشعار من معرض الجوال</div>
+      </div>
+      <div class="logo-box">
+        <label for="awayLogoFile">شعار الفريق الضيف</label>
+        <div id="awayLogoPreview" class="logo-preview">لا يوجد شعار</div>
+        <input id="awayLogoFile" type="file" accept="image/png,image/jpeg,image/webp">
+        <div class="logo-hint">اختر صورة الشعار من معرض الجوال</div>
+      </div>
+    </div>
 
-    const client = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
+    <div class="actions">
+      <button id="saveBtn" class="primary" type="submit">حفظ المباراة</button>
+      <button id="cancelEditBtn" class="secondary hidden" type="button">إلغاء التعديل</button>
+      <button id="resetBtn" class="secondary" type="button">مسح الحقول</button>
+    </div>
+    <div id="formMsg" class="message" role="status"></div>
+  </form>
+</div>
+<div class="panel">
+  <div class="topline">
+    <h2 style="margin:0">المباريات المسجلة</h2>
+    <span id="matchCount" class="count">0 مباراة</span>
+  </div>
+  <button id="refreshBtn" class="secondary small" type="button">تحديث القائمة</button>
+  <div id="listMsg" class="message" role="status"></div>
+  <div id="matchesList" style="margin-top:12px"></div>
+</div>
+</section>
+</main>
+
+<script>
+const SUPABASE_URL = 'https://mksjdavhrbtorkqoocez.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_Ql5GPUQvGkh6oKwcoG7i7w_8K2DUX6s';
+
+const client = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+const $ = id => document.getElementById(id);
+
+let currentMatches = [];
+let busy = false;
+
+function showMessage(id, text, type = 'info') {
+  const el = $(id);
+  el.textContent = text;
+  el.className = 'message show ' + type;
+}
+
+function clearMessage(id) {
+  const el = $(id);
+  el.textContent = '';
+  el.className = 'message';
+}
+
+function friendlyError(error) {
+  const msg = String(error?.message || 'حدث خطأ غير معروف');
+  const lower = msg.toLowerCase();
+
+  if (lower.includes('invalid login credentials'))
+    return 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+  if (lower.includes('email not confirmed'))
+    return 'يجب تأكيد البريد الإلكتروني أولاً.';
+  if (lower.includes('failed to fetch'))
+    return 'تعذر الاتصال بـ Supabase. تحقق من الإنترنت.';
+  if (lower.includes('row-level security') || lower.includes('permission denied'))
+    return 'صلاحية العملية مرفوضة. تحقق من صلاحيات الإدارة.';
+  if (lower.includes('invalid api key') || lower.includes('apikey'))
+    return 'مفتاح Supabase غير مقبول.';
+  if (lower.includes('bucket not found'))
+    return 'مساحة تخزين الشعارات غير موجودة. تحقق من تنفيذ خطوة SQL.';
+  return msg;
+}
+
+function setBusy(value) {
+  busy = value;
+  ['loginBtn','saveBtn','logoutBtn','refreshBtn'].forEach(id => {
+    $(id).disabled = value;
+  });
+}
+
+function showDashboard() {
+  $('loginPanel').classList.add('hidden');
+  $('dashboard').classList.remove('hidden');
+}
+
+function showLogin() {
+  $('dashboard').classList.add('hidden');
+  $('loginPanel').classList.remove('hidden');
+}
+
+function statusLabel(status) {
+  return ({
+    upcoming:'لم تبدأ',
+    live:'مباشر',
+    finished:'انتهت'
+  })[status] || status || 'غير محدد';
+}
+
+function safeDate(value) {
+  if (!value) return 'غير محدد';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return date.toLocaleString('ar-SA', {
+    dateStyle:'medium',
+    timeStyle:'short'
+  });
+}
+
+function makeEl(tag, className, text) {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  if (text !== undefined) el.textContent = text;
+  return el;
+}
+
+function showLogoPreview(side, url) {
+  const preview = $(side + 'LogoPreview');
+  preview.replaceChildren();
+
+  if (url) {
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = 'معاينة الشعار';
+    img.onerror = () => {
+      preview.textContent = 'تعذر عرض الصورة';
+    };
+    preview.appendChild(img);
+  } else {
+    preview.textContent = 'لا يوجد شعار';
+  }
+}
+
+function previewSelectedFile(side) {
+  const file = $(side + 'LogoFile').files[0];
+
+  if (!file) return;
+
+  if (!['image/jpeg','image/png','image/webp'].includes(file.type)) {
+    showMessage('formMsg','اختر صورة بصيغة JPG أو PNG أو WEBP.','error');
+    $(side + 'LogoFile').value = '';
+    return;
+  }
+
+  if (file.size > 2 * 1024 * 1024) {
+    showMessage('formMsg','حجم الشعار يجب ألا يتجاوز 2 ميجابايت.','error');
+    $(side + 'LogoFile').value = '';
+    return;
+  }
+
+  clearMessage('formMsg');
+
+  const reader = new FileReader();
+  reader.onload = () => showLogoPreview(side, reader.result);
+  reader.readAsDataURL(file);
+}
+
+$('homeLogoFile').addEventListener('change', () => previewSelectedFile('home'));
+$('awayLogoFile').addEventListener('change', () => previewSelectedFile('away'));
+
+async function uploadLogo(file, side) {
+  if (!file) return null;
+
+  const extension = ({
+    'image/jpeg':'jpg',
+    'image/png':'png',
+    'image/webp':'webp'
+  })[file.type];
+
+  if (!extension) throw new Error('صيغة صورة الشعار غير مدعومة.');
+  if (file.size > 2 * 1024 * 1024)
+    throw new Error('حجم الشعار أكبر من 2 ميجابايت.');
+
+  const fileName =
+    side + '-' + Date.now() + '-' +
+    Math.random().toString(36).slice(2) + '.' + extension;
+
+  const { error } = await client.storage
+    .from('team-logos')
+    .upload(fileName, file, {
+      cacheControl:'3600',
+      upsert:false,
+      contentType:file.type
+    });
+
+  if (error) throw error;
+
+  const { data } = client.storage
+    .from('team-logos')
+    .getPublicUrl(fileName);
+
+  return data.publicUrl;
+}
+
+function resetForm() {
+  $('matchForm').reset();
+  $('matchId').value = '';
+  $('homeLogoUrl').value = '';
+  $('awayLogoUrl').value = '';
+  showLogoPreview('home', '');
+  showLogoPreview('away', '');
+  $('saveBtn').textContent = 'حفظ المباراة';
+  $('cancelEditBtn').classList.add('hidden');
+  clearMessage('formMsg');
+}
+
+function renderMatches() {
+  const list = $('matchesList');
+  list.replaceChildren();
+  $('matchCount').textContent = currentMatches.length + ' مباراة';
+
+  if (!currentMatches.length) {
+    list.appendChild(makeEl('p','muted',
+      'لا توجد مباريات مسجلة حالياً. أضف مباراة من النموذج أعلاه.'));
+    return;
+  }
+
+  currentMatches.forEach(match => {
+    const card = makeEl('article','match');
+    const teams = makeEl('div','teams');
+
+    teams.appendChild(makeEl('span','',match.home || 'فريق غير محدد'));
+    teams.appendChild(makeEl('span','vs','VS'));
+    teams.appendChild(makeEl('span','',match.away || 'فريق غير محدد'));
+    card.appendChild(teams);
+
+    const logos = makeEl('div','match-logos');
+
+    if (match.home_logo) {
+      const img = document.createElement('img');
+      img.src = match.home_logo;
+      img.alt = 'شعار ' + match.home;
+      logos.appendChild(img);
+    }
+
+    if (match.away_logo) {
+      const img = document.createElement('img');
+      img.src = match.away_logo;
+      img.alt = 'شعار ' + match.away;
+      logos.appendChild(img);
+    }
+
+    if (match.home_logo || match.away_logo) {
+      logos.appendChild(makeEl('span','','شعارات المباراة'));
+      card.appendChild(logos);
+    }
+
+    const details = makeEl('div','details');
+    details.appendChild(makeEl('div','',
+      'البطولة: ' + (match.league || 'غير محددة')));
+    details.appendChild(makeEl('div','',
+      'الموعد: ' + safeDate(match.match_time)));
+    details.appendChild(makeEl('div','',
+      'الحالة: ' + statusLabel(match.status)));
+    details.appendChild(makeEl('div','',
+      'رابط البث: ' + (match.stream || 'غير مضاف')));
+    card.appendChild(details);
+
+    const actions = makeEl('div','match-actions');
+
+    const edit = makeEl('button','secondary small','تعديل');
+    edit.type = 'button';
+    edit.addEventListener('click', () => startEdit(match));
+
+    const remove = makeEl('button','danger small','حذف');
+    remove.type = 'button';
+    remove.addEventListener('click', () => deleteMatch(match));
+
+    actions.append(edit,remove);
+    card.appendChild(actions);
+    list.appendChild(card);
+  });
+}
+  async function loadMatches() {
+  clearMessage('listMsg');
+  $('refreshBtn').disabled = true;
+
+  try {
+    const { data, error } = await client
+      .from('matches')
+      .select('id, created_at, home, away, league, match_time, status, stream, home_logo, away_logo')
+      .order('match_time', { ascending:true, nullsFirst:false });
+
+    if (error) throw error;
+
+    currentMatches = data || [];
+    renderMatches();
+
+  } catch (error) {
+    showMessage('listMsg',friendlyError(error),'error');
+  } finally {
+    $('refreshBtn').disabled = busy;
+  }
+}
+
+function startEdit(match) {
+  $('matchId').value = match.id;
+  $('home').value = match.home || '';
+  $('away').value = match.away || '';
+  $('league').value = match.league || '';
+  $('status').value = ['upcoming','live','finished'].includes(match.status)
+    ? match.status : 'upcoming';
+  $('stream').value = match.stream || '';
+
+  if (match.match_time) {
+    const d = new Date(match.match_time);
+    if (!Number.isNaN(d.getTime())) {
+      const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+      $('match_time').value = local.toISOString().slice(0,16);
+    } else {
+      $('match_time').value = '';
+    }
+  } else {
+    $('match_time').value = '';
+  }
+
+  $('homeLogoUrl').value = match.home_logo || '';
+  $('awayLogoUrl').value = match.away_logo || '';
+
+  $('homeLogoFile').value = '';
+  $('awayLogoFile').value = '';
+
+  showLogoPreview('home',match.home_logo || '');
+  showLogoPreview('away',match.away_logo || '');
+
+  $('saveBtn').textContent = 'حفظ التعديلات';
+  $('cancelEditBtn').classList.remove('hidden');
+  clearMessage('formMsg');
+
+  $('matchForm').scrollIntoView({
+    behavior:'smooth',
+    block:'start'
+  });
+}
+
+$('loginForm').addEventListener('submit',async event => {
+  event.preventDefault();
+  if (busy) return;
+
+  clearMessage('loginMsg');
+  setBusy(true);
+  $('loginBtn').textContent = 'جارٍ التحقق...';
+
+  try {
+    const { data,error } = await client.auth.signInWithPassword({
+      email:$('email').value.trim(),
+      password:$('password').value
+    });
+
+    if (error) throw error;
+    if (!data.session) throw new Error('لم يتم إنشاء جلسة تسجيل الدخول.');
+
+    showDashboard();
+    $('password').value = '';
+    await loadMatches();
+
+  } catch (error) {
+    showMessage('loginMsg',friendlyError(error),'error');
+  } finally {
+    setBusy(false);
+    $('loginBtn').textContent = 'دخول إلى اللوحة';
+  }
+});
+
+$('matchForm').addEventListener('submit',async event => {
+  event.preventDefault();
+  if (busy) return;
+
+  clearMessage('formMsg');
+
+  const home = $('home').value.trim();
+  const away = $('away').value.trim();
+  const stream = $('stream').value.trim();
+
+  if (!home || !away) {
+    showMessage('formMsg','اكتب اسم الفريقين أولاً.','error');
+    return;
+  }
+
+  if (stream) {
+    try {
+      const parsed = new URL(stream);
+      if (!['http:','https:'].includes(parsed.protocol)) throw new Error();
+    } catch {
+      showMessage('formMsg','رابط البث غير صحيح.','error');
+      return;
+    }
+  }
+
+  const rawTime = $('match_time').value;
+  const id = $('matchId').value;
+
+  const record = {
+    home,
+    away,
+    league:$('league').value.trim() || null,
+    match_time:rawTime ? new Date(rawTime).toISOString() : null,
+    status:$('status').value,
+    stream:stream || null,
+    home_logo:$('homeLogoUrl').value || null,
+    away_logo:$('awayLogoUrl').value || null
+  };
+
+  setBusy(true);
+  $('saveBtn').textContent = 'جارٍ الحفظ...';
+
+  try {
+    const homeFile = $('homeLogoFile').files[0];
+    const awayFile = $('awayLogoFile').files[0];
+
+    if (homeFile) {
+      showMessage('formMsg','جارٍ رفع شعار الفريق المستضيف...','info');
+      record.home_logo = await uploadLogo(homeFile,'home');
+    }
+
+    if (awayFile) {
+      showMessage('formMsg','جارٍ رفع شعار الفريق الضيف...','info');
+      record.away_logo = await uploadLogo(awayFile,'away');
+    }
+
+    showMessage('formMsg','جارٍ حفظ بيانات المباراة...','info');
+
+    let result;
+
+    if (id) {
+      result = await client.from('matches')
+        .update(record).eq('id',id);
+    } else {
+      result = await client.from('matches').insert(record);
+    }
+
+    if (result.error) throw result.error;
+
+    showMessage(
+      'formMsg',
+      id ? 'تم حفظ تعديلات المباراة وشعاراتها بنجاح.' :
+        'تمت إضافة المباراة وشعاراتها بنجاح.',
+      'success'
     );
 
-    const $ = (id) => document.getElementById(id);
+    resetForm();
+    await loadMatches();
 
-    let currentMatches = [];
-    let busy = false;
+  } catch (error) {
+    showMessage('formMsg',friendlyError(error),'error');
+  } finally {
+    setBusy(false);
+    $('saveBtn').textContent =
+      $('matchId').value ? 'حفظ التعديلات' : 'حفظ المباراة';
+  }
+});
 
-    function showMessage(id, text, type = 'info') {
-      const el = $(id);
-      el.textContent = text;
-      el.className = 'message show ' + type;
+async function deleteMatch(match) {
+  if (busy) return;
+
+  const confirmed = confirm(
+    'تأكيد حذف مباراة ' + match.home + ' ضد ' + match.away + '؟'
+  );
+
+  if (!confirmed) return;
+
+  setBusy(true);
+
+  try {
+    const { error } = await client.from('matches')
+      .delete().eq('id',match.id);
+
+    if (error) throw error;
+
+    showMessage('listMsg','تم حذف المباراة.','success');
+    await loadMatches();
+
+  } catch (error) {
+    showMessage('listMsg',friendlyError(error),'error');
+  } finally {
+    setBusy(false);
+  }
+}
+
+$('cancelEditBtn').addEventListener('click',resetForm);
+$('resetBtn').addEventListener('click',resetForm);
+$('refreshBtn').addEventListener('click',loadMatches);
+
+$('logoutBtn').addEventListener('click',async () => {
+  if (busy) return;
+
+  setBusy(true);
+
+  try {
+    const { error } = await client.auth.signOut();
+    if (error) throw error;
+
+    currentMatches = [];
+    $('matchesList').replaceChildren();
+    resetForm();
+    showLogin();
+    showMessage('loginMsg','تم تسجيل الخروج.','success');
+
+  } catch (error) {
+    showMessage('listMsg',friendlyError(error),'error');
+  } finally {
+    setBusy(false);
+  }
+});
+
+async function initialize() {
+  if (!window.supabase) {
+    showMessage('loginMsg','تعذر تحميل مكتبة Supabase. تحقق من الإنترنت.','error');
+    return;
+  }
+
+  try {
+    const { data,error } = await client.auth.getSession();
+    if (error) throw error;
+
+    if (data.session) {
+      showDashboard();
+      await loadMatches();
+    } else {
+      showLogin();
     }
 
-    function clearMessage(id) {
-      const el = $(id);
-      el.textContent = '';
-      el.className = 'message';
-    }
+  } catch (error) {
+    showMessage('loginMsg',friendlyError(error),'error');
+  }
+}
 
-    function friendlyError(error) {
-      const msg = String(error?.message || 'حدث خطأ غير معروف');
-      const lower = msg.toLowerCase();
+client.auth.onAuthStateChange((event,session) => {
+  if (event === 'SIGNED_OUT' || !session) {
+    showLogin();
+  }
+});
 
-      if (lower.includes('invalid login credentials')) {
-        return 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
-      }
-      if (lower.includes('email not confirmed')) {
-        return 'يجب تأكيد البريد الإلكتروني أولاً من رسالة Supabase.';
-      }
-      if (lower.includes('failed to fetch')) {
-        return 'تعذر الاتصال بـ Supabase. تأكد من الإنترنت وإعدادات المشروع.';
-      }
-      if (lower.includes('row-level security') || lower.includes('permission denied')) {
-        return 'تم الاتصال، لكن صلاحية العملية مرفوضة. تحقق من سياسات RLS ومن صلاحية حساب الإدارة.';
-      }
-      if (lower.includes('invalid api key') || lower.includes('apikey')) {
-        return 'مفتاح Supabase غير مقبول. راجع المفتاح العام في إعدادات المشروع.';
-      }
-      return msg;
-    }
-
-    function setBusy(value) {
-      busy = value;
-      ['loginBtn', 'saveBtn', 'logoutBtn', 'refreshBtn'].forEach(id => {
-        $(id).disabled = value;
-      });
-    }
-
-    function showDashboard() {
-      $('loginPanel').classList.add('hidden');
-      $('dashboard').classList.remove('hidden');
-    }
-
-    function showLogin() {
-      $('dashboard').classList.add('hidden');
-      $('loginPanel').classList.remove('hidden');
-    }
-
-    function resetForm() {
-      $('matchForm').reset();
-      $('matchId').value = '';
-      $('saveBtn').textContent = 'حفظ المباراة';
-      $('cancelEditBtn').classList.add('hidden');
-      clearMessage('formMsg');
-    }
-
-    function statusLabel(status) {
-      const labels = {
-        upcoming: 'لم تبدأ',
-        live: 'مباشر',
-        finished: 'انتهت'
-      };
-      return labels[status] || status || 'غير محدد';
-    }
-
-    function safeDate(value) {
-      if (!value) return 'غير محدد';
-      const date = new Date(value);
-      if (Number.isNaN(date.getTime())) return String(value);
-      return date.toLocaleString('ar-SA', {
-        dateStyle: 'medium',
-        timeStyle: 'short'
-      });
-    }
-
-    function makeEl(tag, className, text) {
-      const el = document.createElement(tag);
-      if (className) el.className = className;
-      if (text !== undefined) el.textContent = text;
-      return el;
-    }
-
-    function renderMatches() {
-      const list = $('matchesList');
-      list.replaceChildren();
-      $('matchCount').textContent = currentMatches.length + ' مباراة';
-
-      if (!currentMatches.length) {
-        list.appendChild(makeEl('p', 'muted',
-          'لا توجد مباريات مسجلة حالياً. أضف مباراة من النموذج أعلاه.'));
-        return;
-      }
-
-      currentMatches.forEach(match => {
-        const card = makeEl('article', 'match');
-
-        const teams = makeEl('div', 'teams');
-        teams.appendChild(makeEl('span', '', match.home || 'فريق غير محدد'));
-        teams.appendChild(makeEl('span', 'vs', 'VS'));
-        teams.appendChild(makeEl('span', '', match.away || 'فريق غير محدد'));
-        card.appendChild(teams);
-
-        const details = makeEl('div', 'details');
-        details.appendChild(makeEl('div', '', 'البطولة: ' + (match.league || 'غير محددة')));
-        details.appendChild(makeEl('div', '', 'الموعد: ' + safeDate(match.match_time)));
-        details.appendChild(makeEl('div', '', 'الحالة: ' + statusLabel(match.status)));
-        details.appendChild(makeEl('div', '', 'رابط البث: ' + (match.stream || 'غير مضاف')));
-        card.appendChild(details);
-
-        const actions = makeEl('div', 'match-actions');
-
-        const edit = makeEl('button', 'secondary small', 'تعديل');
-        edit.type = 'button';
-        edit.addEventListener('click', () => startEdit(match));
-
-        const remove = makeEl('button', 'danger small', 'حذف');
-        remove.type = 'button';
-        remove.addEventListener('click', () => deleteMatch(match));
-
-        actions.append(edit, remove);
-        card.appendChild(actions);
-        list.appendChild(card);
-      });
-    }
-
-    async function loadMatches() {
-      clearMessage('listMsg');
-      $('refreshBtn').disabled = true;
-
-      try {
-        const { data, error } = await client
-          .from('matches')
-          .select('id, created_at, home, away, league, match_time, status, stream')
-          .order('match_time', { ascending: true, nullsFirst: false });
-
-        if (error) throw error;
-
-        currentMatches = data || [];
-        renderMatches();
-      } catch (error) {
-        showMessage('listMsg', friendlyError(error), 'error');
-      } finally {
-        $('refreshBtn').disabled = busy;
-      }
-    }
-
-    $('loginForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      if (busy) return;
-
-      clearMessage('loginMsg');
-      setBusy(true);
-      $('loginBtn').textContent = 'جارٍ التحقق...';
-
-      try {
-        const email = $('email').value.trim();
-        const password = $('password').value;
-
-        const { data, error } = await client.auth.signInWithPassword({
-          email,
-          password
-        });
-
-        if (error) throw error;
-        if (!data.session) throw new Error('لم يتم إنشاء جلسة تسجيل الدخول.');
-
-        showDashboard();
-        $('password').value = '';
-        await loadMatches();
-      } catch (error) {
-        showMessage('loginMsg', friendlyError(error), 'error');
-      } finally {
-        setBusy(false);
-        $('loginBtn').textContent = 'دخول إلى اللوحة';
-      }
-    });
-
-    function startEdit(match) {
-      $('matchId').value = match.id;
-      $('home').value = match.home || '';
-      $('away').value = match.away || '';
-      $('league').value = match.league || '';
-      $('status').value = ['upcoming', 'live', 'finished'].includes(match.status)
-        ? match.status : 'upcoming';
-      $('stream').value = match.stream || '';
-
-      if (match.match_time) {
-        const d = new Date(match.match_time);
-        if (!Number.isNaN(d.getTime())) {
-          const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
-          $('match_time').value = local.toISOString().slice(0, 16);
-        } else {
-          $('match_time').value = '';
-        }
-      } else {
-        $('match_time').value = '';
-      }
-
-      $('saveBtn').textContent = 'حفظ التعديلات';
-      $('cancelEditBtn').classList.remove('hidden');
-      clearMessage('formMsg');
-      $('matchForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    $('matchForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      if (busy) return;
-
-      clearMessage('formMsg');
-
-      const home = $('home').value.trim();
-      const away = $('away').value.trim();
-      const stream = $('stream').value.trim();
-
-      if (!home || !away) {
-        showMessage('formMsg', 'اكتب اسم الفريقين أولاً.', 'error');
-        return;
-      }
-
-      if (stream) {
-        try {
-          const parsed = new URL(stream);
-          if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error();
-        } catch {
-          showMessage('formMsg', 'رابط البث غير صحيح. استخدم رابطاً يبدأ بـ https:// أو http://', 'error');
-          return;
-        }
-      }
-
-      const rawTime = $('match_time').value;
-      const record = {
-        home,
-        away,
-        league: $('league').value.trim() || null,
-        match_time: rawTime ? new Date(rawTime).toISOString() : null,
-        status: $('status').value,
-        stream: stream || null
-      };
-
-      const id = $('matchId').value;
-      setBusy(true);
-      $('saveBtn').textContent = 'جارٍ الحفظ...';
-
-      try {
-        let result;
-
-        if (id) {
-          result = await client.from('matches').update(record).eq('id', id);
-        } else {
-          result = await client.from('matches').insert(record);
-        }
-
-        if (result.error) throw result.error;
-
-        showMessage('formMsg', id ? 'تم حفظ تعديلات المباراة.' : 'تمت إضافة المباراة بنجاح.', 'success');
-        resetForm();
-        await loadMatches();
-      } catch (error) {
-        showMessage('formMsg', friendlyError(error), 'error');
-      } finally {
-        setBusy(false);
-        $('saveBtn').textContent = $('matchId').value ? 'حفظ التعديلات' : 'حفظ المباراة';
-      }
-    });
-
-    async function deleteMatch(match) {
-      if (busy) return;
-      const confirmed = confirm('تأكيد حذف مباراة ' + match.home + ' ضد ' + match.away + '؟');
-      if (!confirmed) return;
-
-      setBusy(true);
-      try {
-        const { error } = await client.from('matches').delete().eq('id', match.id);
-        if (error) throw error;
-
-        showMessage('listMsg', 'تم حذف المباراة.', 'success');
-        await loadMatches();
-      } catch (error) {
-        showMessage('listMsg', friendlyError(error), 'error');
-      } finally {
-        setBusy(false);
-      }
-    }
-
-    $('cancelEditBtn').addEventListener('click', resetForm);
-    $('resetBtn').addEventListener('click', resetForm);
-    $('refreshBtn').addEventListener('click', loadMatches);
-
-    $('logoutBtn').addEventListener('click', async () => {
-      if (busy) return;
-      setBusy(true);
-
-      try {
-        const { error } = await client.auth.signOut();
-        if (error) throw error;
-
-        currentMatches = [];
-        $('matchesList').replaceChildren();
-        resetForm();
-        showLogin();
-        showMessage('loginMsg', 'تم تسجيل الخروج.', 'success');
-      } catch (error) {
-        showMessage('listMsg', friendlyError(error), 'error');
-      } finally {
-        setBusy(false);
-      }
-    });
-
-    async function initialize() {
-      if (!window.supabase) {
-        showMessage('loginMsg',
-          'تعذر تحميل مكتبة Supabase. تحقق من الاتصال بالإنترنت ثم أعد تحميل الصفحة.',
-          'error');
-        return;
-      }
-
-      try {
-        const { data, error } = await client.auth.getSession();
-        if (error) throw error;
-
-        if (data.session) {
-          showDashboard();
-          await loadMatches();
-        } else {
-          showLogin();
-        }
-      } catch (error) {
-        showMessage('loginMsg', friendlyError(error), 'error');
-      }
-    }
-
-    client.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_OUT' || !session) {
-        showLogin();
-      }
-    });
-
-    initialize();
-  </script>
+initialize();
+</script>
 </body>
-  </html>
+</html>
