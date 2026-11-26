@@ -1,901 +1,929 @@
+
+
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080D10">
-<meta name="description" content="مدرج الفهد Live — جدول المباريات وروابط المشاهدة">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050605">
 <title>مدرج الفهد Live | The Cheetah</title>
+<meta name="description" content="مدرج الفهد Live — جدول المباريات وروابط المشاهدة">
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800;900&display=swap');
+
 :root{
- --bg:#080D10;
- --panel:#10191B;
- --line:#494237;
- --accent:#C6A66B;
- --accent2:#F0DDB8;
- --silver:#C2D0CD;
- --text:#F3F7F6;
- --muted:#9EAFAB;
- --red:#FF424B;
- --tomorrow:#B9A5D5;
- --tomorrow-bg:#292238;
+  --bg:#050605;
+  --panel:#10120f;
+  --gold:#c6a66b;
+  --gold2:#f0ddb8;
+  --text:#f5f2e9;
+  --muted:#9a9a8e;
+  --green:#00d878;
+  --red:#ff5555;
+  --border:rgba(198,166,107,.18);
 }
 
 *{box-sizing:border-box}
 
 body{
- margin:0;
- min-height:100vh;
- background:
- radial-gradient(ellipse at 50% 0%,#30271A 0,transparent 48%),
- radial-gradient(ellipse at 90% 45%,#211F19 0,transparent 42%),
- linear-gradient(180deg,#080D10,#171612 55%,#080D10);
- background-color:var(--bg);
- color:var(--text);
- font-family:Tahoma,Arial,sans-serif;
+  margin:0;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(198,166,107,.10),transparent 42%),
+    var(--bg);
+  color:var(--text);
+  font-family:'Tajawal',sans-serif;
+  min-height:100vh;
 }
 
-.wrap{width:min(1420px,94%);margin:auto}
+button,input{font-family:inherit}
+button{cursor:pointer}
 
-header{
- position:relative;
- overflow:hidden;
- border-bottom:1px solid #51432D;
- background:rgba(8,13,16,.96);
+.container{
+  width:min(1100px,94%);
+  margin:auto;
 }
 
-header:after{
- content:"";
- position:absolute;
- bottom:0;left:0;right:0;height:3px;
- background:linear-gradient(90deg,transparent,#C6A66B,#F0DDB8,#C6A66B,transparent);
- opacity:1;
+header{padding:22px 0 12px}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
 }
 
-.top{
- min-height:300px;
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:20px;
- position:relative;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
 
-.brand{display:flex;align-items:center;gap:25px;min-width:0}
-
-.cheetah{
- width:clamp(145px,29vw,390px);
- height:260px;
- flex:0 0 auto;
- background-color:#10191B;
- background-position:center 35%;
- background-size:cover;
- background-repeat:no-repeat;
- background-image:url("./cheetah.webp");
- mask-image:linear-gradient(90deg,#000 70%,transparent 100%);
- -webkit-mask-image:linear-gradient(90deg,#000 70%,transparent 100%);
- filter:contrast(1.12) saturate(.82);
+.logo{
+  width:54px;
+  height:54px;
+  border:1px solid var(--gold);
+  border-radius:16px;
+  overflow:hidden;
+  background:#111;
+  display:grid;
+  place-items:center;
 }
 
-.brand-copy{
- border-right:2px solid var(--accent);
- padding:8px 0 8px 22px;
-}
-
-.eyebrow{
- color:var(--accent);
- font-size:clamp(12px,1.5vw,19px);
- letter-spacing:6px;
- font-weight:700;
- margin:0 0 5px;
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
 .brand h1{
- font-family:Arial,Tahoma,sans-serif;
- direction:ltr;
- text-align:right;
- line-height:.93;
- font-size:clamp(34px,6.2vw,82px);
- letter-spacing:1px;
- margin:0;
- font-weight:900;
+  font-size:23px;
+  margin:0;
+  font-weight:900;
+  color:var(--gold2);
 }
 
-.brand h1 .the{
- display:block;
- font-size:.34em;
- color:var(--silver);
- letter-spacing:7px;
- margin-bottom:9px;
+.brand p{
+  margin:3px 0 0;
+  color:var(--muted);
+  font-size:12px;
+  letter-spacing:1px;
 }
 
-.brand h1 .cheetah-word{display:block;color:#F3F7F6}
-
-.brand h1 .live-word{
- display:block;
- color:var(--accent);
- font-size:.47em;
- letter-spacing:10px;
- margin-top:10px;
+.live-indicator{
+  color:var(--green);
+  font-size:12px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  gap:7px;
 }
 
-.subtitle{
- font-size:clamp(11px,1.4vw,16px);
- color:#AEBDB9;
- margin:14px 0 0;
+.live-indicator i{
+  width:8px;
+  height:8px;
+  background:var(--green);
+  border-radius:50%;
+  box-shadow:0 0 10px var(--green);
+  animation:pulse 1.5s infinite;
 }
 
-.live-pill{
- align-self:flex-start;
- margin-top:28px;
- border:1px solid #665438;
- border-radius:30px;
- padding:11px 17px;
- font-size:13px;
- white-space:nowrap;
- background:#211D16;
- color:#E8DCC5;
+@keyframes pulse{
+  50%{opacity:.35}
 }
 
-.live-pill i{
- display:inline-block;
- width:10px;height:10px;
- border-radius:50%;
- background:var(--accent);
- margin-left:8px;
- box-shadow:0 0 13px #C6A66B;
+.hero{
+  margin-top:22px;
+  min-height:230px;
+  border:1px solid var(--border);
+  border-radius:23px;
+  overflow:hidden;
+  position:relative;
+  background:
+    linear-gradient(90deg,rgba(5,6,5,.97) 5%,rgba(5,6,5,.77) 55%,rgba(5,6,5,.2)),
+    url('./cheetah.webp') center 35%/cover;
+  display:flex;
+  align-items:center;
+  padding:30px;
 }
 
-main{padding-bottom:28px}
-.hero{padding:16px 0 12px}
+.hero-content{
+  max-width:570px;
+  position:relative;
+  z-index:1;
+}
+
+.hero-tag{
+  display:inline-block;
+  color:var(--gold2);
+  border:1px solid rgba(198,166,107,.45);
+  background:rgba(198,166,107,.10);
+  border-radius:30px;
+  padding:6px 13px;
+  font-size:12px;
+  margin-bottom:13px;
+}
 
 .hero h2{
- font-size:clamp(20px,2.7vw,30px);
- margin:0 0 5px;
- line-height:1.5;
+  font-size:clamp(26px,5vw,42px);
+  line-height:1.25;
+  margin:0 0 10px;
+  font-weight:900;
 }
 
-.hero h2 span{color:var(--accent)}
+.hero h2 span{color:var(--gold)}
 
-.toolbar{
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:14px;
- flex-wrap:wrap;
- padding:12px 14px;
- border:1px solid #51432D;
- border-radius:18px;
- background:linear-gradient(135deg,#211E17,#10191B);
- margin:10px 0 5px;
- box-shadow:0 8px 28px #02080780;
+.hero p{
+  color:#c3c0b7;
+  margin:0;
+  line-height:1.8;
+  font-size:14px;
 }
 
-.filters{display:flex;gap:9px;flex-wrap:wrap}
-
-button{font:inherit;cursor:pointer}
-
-.filter{
- min-width:112px;
- padding:12px 17px;
- border:1px solid #51483A;
- background:#211F19;
- color:#E7F0ED;
- border-radius:13px;
- display:inline-flex;
- align-items:center;
- justify-content:center;
- gap:9px;
- transition:all .2s ease;
+.section-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin:28px 0 15px;
 }
 
-.filter-symbol{
- font-size:22px;
- line-height:1;
- font-weight:900;
- display:inline-block;
- transform:scale(1.08);
+.section-heading h2{
+  font-size:19px;
+  margin:0;
+  color:var(--gold2);
 }
 
-.filter.active{
- color:#F0DDB8;
- border-color:var(--accent);
- background:linear-gradient(135deg,#594526,#30291D);
- font-weight:800;
- box-shadow:0 0 18px #C6A66B33,inset 0 0 12px #C6A66B22;
+.section-heading small{
+  color:var(--muted);
+  font-size:12px;
 }
 
-.filter:hover{
- border-color:var(--accent);
- color:var(--accent2);
+.featured{
+  border:1px solid rgba(198,166,107,.4);
+  border-radius:20px;
+  padding:19px;
+  background:
+    linear-gradient(135deg,rgba(198,166,107,.10),transparent 65%),
+    var(--panel);
 }
 
-.count{color:#D6E0DD;font-size:13px}
-.count strong{color:var(--accent);font-size:19px}
-
-.message{
- padding:15px 17px;
- margin:10px 0;
- border:1px solid #51483A;
- border-radius:13px;
- background:#1B1B17;
- color:var(--muted);
- line-height:1.8;
- font-size:14px;
+.featured-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
 }
 
-.message.error{color:#FFB8BC;border-color:#874047}
-
-.matches{
- display:flex;
- flex-direction:column;
- gap:7px;
- padding:0 0 18px;
+.featured-label{
+  color:var(--gold);
+  font-weight:800;
+  font-size:13px;
 }
 
-.match{
- display:grid;
- grid-template-columns:minmax(175px,1.05fr) minmax(300px,2.1fr) minmax(150px,.85fr) minmax(150px,.9fr);
- align-items:center;
- gap:16px;
- min-height:108px;
- padding:13px 18px;
- background:linear-gradient(110deg,#101A1A,#211F19 52%,#10191B);
- border:1px solid #494237;
- border-radius:16px;
- transition:border-color .2s,box-shadow .2s;
- box-shadow:0 5px 18px #02080760;
+.league{
+  color:var(--muted);
+  font-size:12px;
 }
-
-.match:hover{
- border-color:var(--accent);
- box-shadow:0 0 20px #C6A66B29;
-}
-
-.match.is-live{border-right:3px solid var(--red)}
-
-.league-block{display:flex;align-items:center;gap:13px;min-width:0}
-
-.league-symbol{
- width:49px;height:49px;
- flex:0 0 49px;
- border-radius:50%;
- display:grid;
- place-items:center;
- background:linear-gradient(145deg,#51432D,#292219);
- border:1px solid #806B45;
- color:var(--accent2);
- font-size:22px;
- font-weight:900;
-}
-
-.league-name{
- font-size:13px;
- font-weight:700;
- line-height:1.7;
- overflow-wrap:anywhere;
-}
-
-.league-sub{font-size:11px;color:#A5B8B2;margin-top:3px}
 
 .teams{
- display:grid;
- grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
- gap:14px;
- align-items:center;
- text-align:center;
- min-width:0;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:12px;
 }
 
 .team{
- font-weight:900;
- font-size:clamp(14px,1.7vw,22px);
- overflow-wrap:anywhere;
- line-height:1.5;
+  text-align:center;
+  min-width:0;
+}
+
+.team-name{
+  font-size:clamp(16px,3vw,21px);
+  font-weight:900;
+  overflow-wrap:anywhere;
+}
+
+.team-caption{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:5px;
 }
 
 .vs{
- font:900 clamp(18px,2.2vw,28px)/1 Arial,sans-serif;
- color:var(--accent);
- direction:ltr;
+  color:var(--gold);
+  font-size:13px;
+  font-weight:900;
 }
 
-.time-block{
- text-align:center;
- padding:2px 13px;
- border-right:1px solid #51483A;
- border-left:1px solid #51483A;
- min-width:0;
+.match-info{
+  text-align:center;
+  margin-top:20px;
+  padding-top:15px;
+  border-top:1px solid var(--border);
 }
 
-.time{
- font:700 clamp(21px,2.1vw,29px)/1.25 Arial,Tahoma,sans-serif;
- direction:ltr;
- white-space:nowrap;
-}
-
-.date{font-size:12px;color:var(--silver);margin-top:4px;line-height:1.7}
-
-.status{
- display:inline-flex;
- align-items:center;
- justify-content:center;
- gap:6px;
- margin-top:5px;
- padding:4px 11px;
- border:1px solid #806B45;
- border-radius:20px;
- color:#F0DDB8;
- background:#302719;
- font-size:11px;
- font-weight:800;
- white-space:nowrap;
-}
-
-.status.live{
- color:#FF858B;
- background:#351A1D;
- border-color:#FF424B;
-}
-
-.status.finished{
- color:#C7D0CE;
- background:#242D2D;
- border-color:#566361;
-}
-
-/* حالة مباريات الغد */
-.status.tomorrow{
- color:var(--tomorrow);
- background:var(--tomorrow-bg);
- border-color:#79658F;
-}
-
-/* زر المشاهدة - جلد الفهد ووجهه الحقيقي */
-.watch{
- position:relative;
- isolation:isolate;
- overflow:hidden;
- display:flex;
- align-items:center;
- justify-content:center;
- width:100%;
- min-height:58px;
- border:1px solid #D8B36F;
- border-radius:13px;
- background-color:#B98D4D;
- background-image:
- radial-gradient(ellipse 9px 6px at 12% 25%,#704821 0 65%,transparent 73%),
- radial-gradient(ellipse 7px 9px at 24% 76%,#704821 0 65%,transparent 73%),
- radial-gradient(ellipse 11px 7px at 42% 17%,#704821 0 65%,transparent 73%),
- radial-gradient(ellipse 8px 10px at 53% 78%,#704821 0 65%,transparent 73%),
- radial-gradient(ellipse 10px 7px at 70% 25%,#704821 0 65%,transparent 73%),
- radial-gradient(ellipse 7px 9px at 83% 75%,#704821 0 65%,transparent 73%),
- linear-gradient(120deg,#D8B778,#A97839 55%,#D6B16D);
- color:#FFFFFF;
- font-size:15px;
- font-weight:900;
- padding:7px 78px 7px 12px;
- box-shadow:0 4px 16px #00000055;
- transition:filter .2s,transform .2s;
-}
-
-/* وجه الفهد الحقيقي */
-.watch:after{
- content:"";
- position:absolute;
- z-index:2;
- top:50%;
- right:5px;
- transform:translateY(-50%);
- width:66px;
- height:52px;
- border-radius:9px;
- border:1px solid #D8B36F;
- opacity:1;
- pointer-events:none;
- background-color:#342619;
- background-image:
- linear-gradient(180deg,#00000008,#00000035),
- url("./cheetah.webp");
- background-repeat:no-repeat;
- background-size:cover;
- background-position:center 35%;
- box-shadow:0 2px 9px #00000070;
-}
-
-/* المستطيل الداكن يملأ إطار الزر من الداخل */
-.watch:before{
- content:"";
- position:absolute;
- z-index:1;
- inset:4px;
- border:1px solid #D9B873;
- border-radius:9px;
- background:linear-gradient(110deg,#17130FEE,#292018F2);
- box-shadow:0 2px 8px #00000055;
- pointer-events:none;
-}
-
-/* تمديد العبارة لتناسب المساحة */
-.watch span{
- position:relative;
- z-index:3;
- display:flex;
- align-items:center;
- justify-content:center;
- flex:1;
- min-width:0;
- min-height:40px;
- font-size:15px;
- font-weight:900;
- white-space:nowrap;
- text-align:center;
- transform:scaleX(1.08);
- text-shadow:0 2px 4px #000000;
-}
-
-.watch:hover{
- filter:brightness(1.13);
- transform:translateY(-1px);
- box-shadow:0 5px 20px #00000080;
-}
-
-.watch:disabled{
- background:#252D2D;
- background-image:none;
- border-color:#414B4B;
- color:#929F9C;
- cursor:not-allowed;
- box-shadow:none;
-}
-
-.watch:disabled:before,
-.watch:disabled:after{
- display:none;
-}
-
-.watch:disabled span{
- text-shadow:none;
- transform:none;
-}
-
-footer{
- border-top:1px solid #51432D;
- text-align:center;
- padding:18px 0 25px;
- color:#AAB8B4;
- font-size:12px;
-}
-
-.footer-cheetah{color:var(--accent);margin:0 7px}
-.hidden{display:none!important}
-
-@media(max-width:900px){
- .top{min-height:235px}
- .cheetah{height:220px;width:clamp(125px,27vw,250px)}
- .brand{gap:12px}
- .match{grid-template-columns:minmax(140px,.8fr) minmax(240px,1.5fr) minmax(125px,.75fr)}
- .watch-wrap{grid-column:1/-1}
- .watch{padding:7px 78px 7px 12px}
- .time-block{border-left:0}
-}
-
-@media(max-width:620px){
- .wrap{width:94%}
- .top{min-height:190px;align-items:center;gap:5px}
- .brand{gap:3px}
- .cheetah{width:115px;height:170px}
- .brand-copy{padding:4px 10px 4px 0}
- .brand h1{font-size:clamp(27px,8vw,39px)}
- .brand h1 .the{letter-spacing:4px;margin-bottom:6px}
- .brand h1 .live-word{letter-spacing:6px;margin-top:6px}
- .subtitle{font-size:10px;margin-top:8px}
- .live-pill{
-  position:absolute;
-  top:8px;left:0;
-  margin:0;
-  font-size:10px;
-  padding:7px 9px;
- }
- .hero{padding-top:13px}
- .hero h2{font-size:21px}
- .toolbar{padding:9px}
- .filters{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  width:100%;
-  gap:7px;
- }
- .filter{min-width:0;padding:10px 7px;font-size:12px}
- .filter-symbol{font-size:23px}
- .count{font-size:12px}
- .match{
-  grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);
-  gap:10px;
-  padding:12px 10px;
-  min-height:0;
- }
- .league-block{gap:7px}
- .league-symbol{width:35px;height:35px;flex-basis:35px;font-size:16px}
- .league-name{font-size:11px}
- .league-sub{font-size:10px}
- .teams{gap:6px}
- .team{font-size:13px}
- .vs{font-size:15px}
- .time-block{
-  grid-column:1/-1;
-  border:0;
-  border-top:1px solid #51483A;
-  padding:9px 0 0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;
- }
- .time{font-size:21px}
- .date{font-size:11px;margin:0}
- .status{margin:0;font-size:10px}
- .watch-wrap{grid-column:1/-1}
- .watch{
+.match-time{
   font-size:14px;
-  padding:6px 72px 6px 10px;
-  min-height:54px;
- }
- .watch:after{
-  width:60px;
-  height:48px;
- }
- .watch span{
-  min-height:38px;
-  font-size:14px;
-  transform:scaleX(1.04);
- }
+  color:var(--gold2);
+  font-weight:700;
 }
+
+.countdown{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.countdown strong{color:var(--gold2)}
 </style>
 </head>
 
+<style>
+.search-box{
+  margin-top:20px;
+  position:relative;
+}
+
+.search-box input{
+  width:100%;
+  background:var(--panel);
+  color:white;
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:14px 16px;
+  font-size:14px;
+  outline:none;
+}
+
+.search-box input:focus{
+  border-color:var(--gold);
+}
+
+.filters{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:14px 0 5px;
+  scrollbar-width:none;
+}
+
+.filters::-webkit-scrollbar{display:none}
+
+.filter-btn{
+  flex:0 0 auto;
+  background:#141611;
+  border:1px solid var(--border);
+  color:#bcb9ae;
+  border-radius:30px;
+  padding:9px 17px;
+  font-size:12px;
+  font-weight:700;
+}
+
+.filter-btn.active{
+  color:#15120b;
+  background:var(--gold);
+  border-color:var(--gold);
+}
+
+.matches-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:13px;
+  margin-top:12px;
+}
+
+.match-card{
+  background:linear-gradient(145deg,#151711,#0c0e0b);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:16px;
+  transition:.2s;
+}
+
+.match-card:active{transform:scale(.985)}
+
+.card-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:17px;
+}
+
+.card-league{
+  color:var(--muted);
+  font-size:11px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.status{
+  flex:0 0 auto;
+  border-radius:30px;
+  padding:5px 10px;
+  font-size:10px;
+  font-weight:900;
+}
+
+.status.live{
+  background:rgba(0,216,120,.12);
+  color:var(--green);
+}
+
+.status.upcoming{
+  background:rgba(198,166,107,.13);
+  color:var(--gold2);
+}
+
+.status.finished{
+  background:rgba(150,150,150,.13);
+  color:#aaa;
+}
+
+.card-teams{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:8px;
+  text-align:center;
+}
+
+.card-team{
+  font-size:15px;
+  font-weight:900;
+  overflow-wrap:anywhere;
+}
+
+.card-vs{
+  color:var(--gold);
+  font-size:11px;
+  font-weight:900;
+}
+
+.card-bottom{
+  border-top:1px solid rgba(255,255,255,.06);
+  margin-top:16px;
+  padding-top:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.card-time{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.watch-btn{
+  text-decoration:none;
+  background:linear-gradient(135deg,#e3c68e,#b58e4e);
+  color:#17130b;
+  font-weight:900;
+  font-size:11px;
+  padding:8px 13px;
+  border-radius:9px;
+  white-space:nowrap;
+}
+
+.watch-btn.disabled{
+  background:#282a24;
+  color:#777;
+  pointer-events:none;
+}
+
+.card-actions{
+  display:flex;
+  gap:7px;
+  margin-top:10px;
+}
+
+.action-btn{
+  background:transparent;
+  border:1px solid rgba(255,255,255,.10);
+  color:#aaa;
+  padding:6px 10px;
+  border-radius:8px;
+  font-size:10px;
+}
+
+.empty{
+  text-align:center;
+  padding:35px 15px;
+  background:var(--panel);
+  border:1px dashed var(--border);
+  border-radius:16px;
+  color:var(--muted);
+  grid-column:1/-1;
+  line-height:2;
+}
+
+.loading{
+  text-align:center;
+  color:var(--gold);
+  padding:30px;
+  grid-column:1/-1;
+}
+
+.error{color:#ff8585}
+
+footer{
+  text-align:center;
+  padding:35px 10px 25px;
+  color:#77786e;
+  font-size:11px;
+  line-height:2;
+}
+
+footer strong{color:var(--gold)}
+
+@media(max-width:650px){
+  .matches-grid{grid-template-columns:1fr}
+  .hero{min-height:210px;padding:22px}
+  .brand h1{font-size:19px}
+  .logo{width:47px;height:47px}
+}
+</style>
+
 <body>
+<div class="container">
+
 <header>
- <div class="wrap top">
-  <div class="brand">
-   <div class="cheetah" role="img" aria-label="صورة فهد حقيقي"></div>
-   <div class="brand-copy">
-    <h1>
-     <span class="the">THE</span>
-     <span class="cheetah-word">CHEETAH</span>
-     <span class="live-word">LIVE</span>
-    </h1>
-    <p class="subtitle">مدرج الفهد — وجهتك لمتابعة المباريات</p>
-   </div>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <img src="./cheetah.webp" alt="شعار الفهد"
+        onerror="this.style.display='none'">
+      </div>
+      <div>
+        <h1>مدرج الفهد <span style="color:#c6a66b">LIVE</span></h1>
+        <p>THE CHEETAH • FOOTBALL EXPERIENCE</p>
+      </div>
+    </div>
+
+    <div class="live-indicator">
+      <i></i>
+      تحديث مباشر
+    </div>
   </div>
-  <div class="live-pill"><i></i> تغطية المباريات</div>
- </div>
 </header>
 
-<main class="wrap">
- <section class="hero">
-  <h2>مدرج واحد لكل المباريات — <span>اختر وشاهد</span></h2>
- </section>
-
- <section class="toolbar" aria-label="تصفية المباريات">
-  <div class="filters">
-   <button class="filter active" data-filter="all" type="button">
-    <span class="filter-symbol">▦</span> كل المباريات
-   </button>
-   <button class="filter" data-filter="live" type="button">
-    <span class="filter-symbol">◉</span> مباشر
-   </button>
-   <button class="filter" data-filter="upcoming" type="button">
-    <span class="filter-symbol">◷</span> قادمة
-   </button>
-   <button class="filter" data-filter="finished" type="button">
-    <span class="filter-symbol">⚑</span> انتهت
-   </button>
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-tag">THE CHEETAH EXPERIENCE</span>
+    <h2>هنا تبدأ <span>الحكاية</span></h2>
+    <p>
+      وجهتك لمتابعة جدول المباريات وروابط المشاهدة.
+      كل المواجهات في مكان واحد.
+    </p>
   </div>
-  <div class="count" id="count"> </div>
- </section>
+</section>
 
- <div id="message" class="message hidden" role="status"></div>
- <section id="matches" class="matches" aria-live="polite"></section>
-</main>
+<div class="section-heading">
+  <h2>⭐ المواجهة الأبرز</h2>
+  <small id="featuredDate">بانتظار المباريات</small>
+</div>
+
+<section class="featured" id="featured">
+  <div style="text-align:center;color:#999;padding:15px">
+    جارٍ تحميل المواجهات...
+  </div>
+</section>
+
+<div class="section-heading">
+  <h2>جدول المباريات</h2>
+  <small id="matchCount">0 مباراة</small>
+</div>
+
+<div class="search-box">
+  <input id="searchInput" type="search"
+  placeholder="ابحث عن فريق أو بطولة...">
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" data-filter="all">كل المباريات</button>
+  <button class="filter-btn" data-filter="live">مباشر</button>
+  <button class="filter-btn" data-filter="upcoming">قادمة</button>
+  <button class="filter-btn" data-filter="finished">انتهت</button>
+</div>
+
+<div class="matches-grid" id="matches">
+  <div class="loading">جارٍ الاتصال بقاعدة البيانات...</div>
+</div>
 
 <footer>
- © <span id="year"></span>
- <span class="footer-cheetah">♧</span>
- مدرج الفهد Live — جميع الحقوق محفوظة
+  <strong>مدرج الفهد LIVE</strong><br>
+  THE CHEETAH — عالم كرة القدم بين يديك
 </footer>
 
+</div>
+
 <script>
-'use strict';
+const SUPABASE_URL = 'https://mksjdavhrbtorkqoocez.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_Ql5GPUQvGkh6oKwcoG7i7w_8K2DUX6s';
 
-const SUPABASE_URL='https://mksjdavhrbtorkqoocez.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY='sb_publishable_Ql5GPUQvGkh6oKwcoG7i7w_8K2DUX6s';
+const matchesContainer = document.getElementById('matches');
+const featuredContainer = document.getElementById('featured');
+const searchInput = document.getElementById('searchInput');
 
-const message=document.getElementById('message');
-const matchesEl=document.getElementById('matches');
-const countEl=document.getElementById('count');
-const filters=document.querySelectorAll('.filter');
+let allMatches = [];
+let currentFilter = 'all';
 
-let allMatches=[];
-let currentFilter='all';
-
-const SAUDI_TIME_ZONE='Asia/Riyadh';
-
-document.getElementById('year').textContent=new Date().getFullYear();
-
-function normalizeStatus(value){
- const s=String(value??'').toLowerCase().trim();
- if(['live','مباشر','جارية','now'].includes(s))return 'live';
- if(['finished','ended','انتهت','منتهية','completed'].includes(s))return 'finished';
- return 'upcoming';
+function escapeHTML(value){
+  return String(value ?? '').replace(/[&<>"']/g, function(char){
+    return {
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#039;'
+    }[char];
+  });
 }
 
-function getSaudiDateKey(date){
- const parts=new Intl.DateTimeFormat('en-GB',{
-  timeZone:SAUDI_TIME_ZONE,
-  year:'numeric',
-  month:'2-digit',
-  day:'2-digit'
- }).formatToParts(date);
+function statusType(status){
+  const s = String(status || '').trim().toLowerCase();
 
- const values={};
- parts.forEach(p=>{
-  if(p.type!=='literal')values[p.type]=p.value;
- });
+  if(
+    s.includes('مباشر') ||
+    s.includes('live') ||
+    s.includes('جارية')
+  ) return 'live';
 
- return values.year+'-'+values.month+'-'+values.day;
+  if(
+    s.includes('انته') ||
+    s.includes('finished') ||
+    s.includes('full time') ||
+    s.includes('مكتمل')
+  ) return 'finished';
+
+  return 'upcoming';
 }
 
-function isTomorrow(value){
- if(!value)return false;
+function statusLabel(status){
+  const type = statusType(status);
 
- const matchDate=new Date(value);
- if(Number.isNaN(matchDate.getTime()))return false;
-
- const todayKey=getSaudiDateKey(new Date());
- const tomorrowDate=new Date(todayKey+'T00:00:00Z');
- tomorrowDate.setUTCDate(tomorrowDate.getUTCDate()+1);
-
- const tomorrowKey=tomorrowDate.toISOString().slice(0,10);
-
- return getSaudiDateKey(matchDate)===tomorrowKey;
+  if(type === 'live') return 'مباشر';
+  if(type === 'finished') return 'انتهت';
+  return 'قادمة';
 }
 
-function statusLabel(s,matchTime){
- if(s==='live')return '● مباشر';
- if(s==='finished')return 'انتهت';
- if(isTomorrow(matchTime))return 'غداً';
- return '◷ قادمة';
+function parseMatchDate(value){
+  if(!value) return null;
+
+  const date = new Date(value);
+
+  if(!isNaN(date.getTime())) return date;
+
+  return null;
 }
 
-function dateParts(value){
- if(!value)return {time:'--:--',date:'موعد غير محدد'};
+function formatMatchTime(value){
+  if(!value) return 'الوقت غير محدد';
 
- const d=new Date(value);
- if(Number.isNaN(d.getTime()))return {time:String(value),date:''};
+  const date = parseMatchDate(value);
 
- return {
-  time:new Intl.DateTimeFormat('en-US',{
-   hour:'2-digit',
-   minute:'2-digit',
-   hour12:true,
-   timeZone:SAUDI_TIME_ZONE
-  }).format(d),
-  date:new Intl.DateTimeFormat('ar-SA',{
-   day:'numeric',
-   month:'long',
-   year:'numeric',
-   timeZone:SAUDI_TIME_ZONE
-  }).format(d)
- };
-}
-
-function leagueIcon(name){
- const s=String(name||'').toLowerCase();
- if(s.includes('روشن')||s.includes('سعود'))return '◉';
- if(s.includes('أبطال')||s.includes('champions'))return '✦';
- if(s.includes('إنجليزي')||s.includes('ممتاز')||s.includes('premier'))return '♛';
- if(s.includes('إسباني')||s.includes('لاليغا'))return '◈';
- if(s.includes('إيطالي'))return '◆';
- return '⚽';
-}
-
-function render(){
- const shown=allMatches.filter(m=>currentFilter==='all'||m.status===currentFilter);
-
- countEl.innerHTML='عدد المباريات: <strong>'+shown.length+'</strong>';
- matchesEl.replaceChildren();
-
- if(!shown.length){
-  message.classList.remove('hidden','error');
-  message.textContent=allMatches.length
-   ?'ما فيه مباريات ضمن هذا التصنيف حاليًا.'
-   :'ما فيه مباريات محفوظة حاليًا.';
-  return;
- }
-
- message.classList.add('hidden');
- message.classList.remove('error');
-
- shown.forEach(m=>{
-  const card=document.createElement('article');
-  card.className='match'+(m.status==='live'?' is-live':'');
-
-  const leagueBlock=document.createElement('div');
-  leagueBlock.className='league-block';
-
-  const symbol=document.createElement('div');
-  symbol.className='league-symbol';
-  symbol.textContent=leagueIcon(m.league);
-
-  const leagueInfo=document.createElement('div');
-
-  const league=document.createElement('div');
-  league.className='league-name';
-  league.textContent=m.league||'مباراة';
-
-  const sub=document.createElement('div');
-  sub.className='league-sub';
-  sub.textContent='مدرج الفهد Live';
-
-  leagueInfo.append(league,sub);
-  leagueBlock.append(symbol,leagueInfo);
-
-  const teams=document.createElement('div');
-  teams.className='teams';
-
-  const home=document.createElement('div');
-  home.className='team';
-  home.textContent=m.home||'الفريق الأول';
-
-  const vs=document.createElement('div');
-  vs.className='vs';
-  vs.textContent='VS';
-
-  const away=document.createElement('div');
-  away.className='team';
-  away.textContent=m.away||'الفريق الثاني';
-
-  teams.append(home,vs,away);
-
-  const timeBlock=document.createElement('div');
-  timeBlock.className='time-block';
-
-  const dt=dateParts(m.match_time);
-
-  const time=document.createElement('div');
-  time.className='time';
-  time.textContent=dt.time;
-
-  const date=document.createElement('div');
-  date.className='date';
-  date.textContent=dt.date;
-
-  const badge=document.createElement('span');
-  badge.className='status '+m.status;
-
-  if(m.status==='upcoming'&&isTomorrow(m.match_time)){
-   badge.classList.add('tomorrow');
+  if(date){
+    return new Intl.DateTimeFormat('ar-SA',{
+      dateStyle:'medium',
+      timeStyle:'short'
+    }).format(date);
   }
 
-  badge.textContent=statusLabel(m.status,m.match_time);
+  return String(value);
+}
 
-  timeBlock.append(time,date,badge);
+function getCountdown(value){
+  const date = parseMatchDate(value);
 
-  const watchWrap=document.createElement('div');
-  watchWrap.className='watch-wrap';
+  if(!date) return '';
 
-  const watch=document.createElement('button');
-  watch.className='watch';
-  watch.type='button';
+  const diff = date.getTime() - Date.now();
 
-  const watchText=document.createElement('span');
-  watchText.textContent=m.stream
-   ?(m.status==='live'?'مشاهدة الآن  ▶':'مشاهدة المباراة  ▶')
-   :'رابط المشاهدة غير متوفر';
+  if(diff <= 0) return 'موعد المباراة قد حان';
 
-  watch.append(watchText);
-  watch.disabled=!m.stream;
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const minutes = Math.floor((diff % 3600000) / 60000);
+  const seconds = Math.floor((diff % 60000) / 1000);
 
-  if(m.stream){
-   watch.addEventListener('click',()=>{
-    try{
-     const u=new URL(m.stream);
-     if(!['http:','https:'].includes(u.protocol))throw new Error();
-     window.open(u.href,'_blank','noopener,noreferrer');
-    }catch{
-     alert('رابط المشاهدة غير صحيح. يرجى إبلاغ إدارة الموقع.');
+  let result = '';
+
+  if(days) result += days + ' يوم ';
+  if(hours) result += hours + ' ساعة ';
+  if(minutes) result += minutes + ' دقيقة ';
+
+  if(!days && !hours) result += seconds + ' ثانية';
+
+  return 'باقي <strong>' + result + '</strong>';
+}
+
+function sortMatches(matches){
+  const priority = {live:0,upcoming:1,finished:2};
+
+  return [...matches].sort((a,b)=>{
+    const pa = priority[statusType(a.status)];
+    const pb = priority[statusType(b.status)];
+
+    if(pa !== pb) return pa - pb;
+
+    const da = parseMatchDate(a.match_time);
+    const db = parseMatchDate(b.match_time);
+
+    if(da && db){
+      if(statusType(a.status) === 'finished'){
+        return db - da;
+      }
+      return da - db;
     }
-   });
-  }
 
-  watchWrap.append(watch);
-  card.append(leagueBlock,teams,timeBlock,watchWrap);
-  matchesEl.append(card);
- });
+    return 0;
+  });
 }
 
-filters.forEach(b=>b.addEventListener('click',()=>{
- filters.forEach(x=>x.classList.toggle('active',x===b));
- currentFilter=b.dataset.filter;
- render();
-}));
+function getFeaturedMatch(){
+  const live = allMatches.find(m=>statusType(m.status)==='live');
+  if(live) return live;
 
-async function loadMatches(){
- const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),15000);
+  const upcoming = sortMatches(
+    allMatches.filter(m=>statusType(m.status)==='upcoming')
+  );
 
- try{
-  const endpoint=SUPABASE_URL+
-   '/rest/v1/matches?select=id,home,away,league,match_time,status,stream&order=match_time.asc.nullsfirst';
+  return upcoming[0] || allMatches[0] || null;
+}
 
-  const response=await fetch(endpoint,{
-   method:'GET',
-   mode:'cors',
-   cache:'no-store',
-   signal:controller.signal,
-   headers:{
-    'apikey':SUPABASE_PUBLISHABLE_KEY,
-    'Accept':'application/json'
-   }
+function renderFeatured(){
+  const match = getFeaturedMatch();
+
+  if(!match){
+    featuredContainer.innerHTML =
+      '<div style="text-align:center;color:#999;padding:15px">لا توجد مباريات حالياً</div>';
+    return;
+  }
+
+  const type = statusType(match.status);
+  const countdown = type === 'upcoming'
+    ? getCountdown(match.match_time)
+    : '';
+
+  featuredContainer.innerHTML = `
+    <div class="featured-top">
+      <span class="featured-label">
+        ${type === 'live' ? '● مواجهة مباشرة' : 'المواجهة المختارة'}
+      </span>
+      <span class="league">${escapeHTML(match.league || 'مباراة كرة قدم')}</span>
+    </div>
+
+    <div class="teams">
+      <div class="team">
+        <div class="team-name">${escapeHTML(match.home || 'الفريق الأول')}</div>
+        <div class="team-caption">الفريق الأول</div>
+      </div>
+
+      <div class="vs">VS</div>
+
+      <div class="team">
+        <div class="team-name">${escapeHTML(match.away || 'الفريق الثاني')}</div>
+        <div class="team-caption">الفريق الثاني</div>
+      </div>
+    </div>
+
+    <div class="match-info">
+      <div class="match-time">${escapeHTML(formatMatchTime(match.match_time))}</div>
+      <div class="countdown">${countdown || escapeHTML(statusLabel(match.status))}</div>
+    </div>
+  `;
+}
+
+function renderMatches(){
+  const query = searchInput.value.trim().toLowerCase();
+
+  let filtered = sortMatches(allMatches).filter(match=>{
+    const type = statusType(match.status);
+
+    const filterMatch =
+      currentFilter === 'all' || type === currentFilter;
+
+    const searchText = [
+      match.home,
+      match.away,
+      match.league
+    ].join(' ').toLowerCase();
+
+    return filterMatch && searchText.includes(query);
   });
 
-  const body=await response.text();
-  let data;
+  document.getElementById('matchCount').textContent =
+    filtered.length + ' مباراة';
+
+  if(!filtered.length){
+    matchesContainer.innerHTML = `
+      <div class="empty">
+        لا توجد مباريات مطابقة لبحثك حالياً 🐆
+      </div>
+    `;
+    return;
+  }
+
+  matchesContainer.innerHTML = filtered.map(match=>{
+    const type = statusType(match.status);
+    const stream = String(match.stream || '').trim();
+
+    const watchButton = stream
+      ? `<a class="watch-btn" href="${escapeHTML(stream)}"
+          target="_blank" rel="noopener noreferrer">▶ مشاهدة</a>`
+      : `<span class="watch-btn disabled">لا يوجد رابط</span>`;
+
+    return `
+      <article class="match-card">
+
+        <div class="card-top">
+          <span class="card-league">${escapeHTML(match.league || 'بطولة غير محددة')}</span>
+          <span class="status ${type}">${statusLabel(match.status)}</span>
+        </div>
+
+        <div class="card-teams">
+          <div class="card-team">${escapeHTML(match.home || 'الفريق الأول')}</div>
+          <div class="card-vs">VS</div>
+          <div class="card-team">${escapeHTML(match.away || 'الفريق الثاني')}</div>
+        </div>
+
+        <div class="card-bottom">
+          <span class="card-time">
+            ${escapeHTML(formatMatchTime(match.match_time))}
+          </span>
+          ${watchButton}
+        </div>
+
+        <div class="card-actions">
+          <button class="action-btn"
+            onclick="shareMatch('${encodeURIComponent(match.home || '')}','${encodeURIComponent(match.away || '')}','${encodeURIComponent(match.league || '')}')">
+            مشاركة المباراة
+          </button>
+          <button class="action-btn"
+            onclick="copyMatch('${encodeURIComponent(match.home || '')}','${encodeURIComponent(match.away || '')}')">
+            نسخ الاسم
+          </button>
+        </div>
+
+      </article>
+    `;
+  }).join('');
+}
+</script>
+
+<script>
+async function loadMatches(){
+  try{
+    const response = await fetch(
+      SUPABASE_URL + '/rest/v1/matches?select=id,created_at,home,away,league,match_time,status,stream',
+      {
+        method:'GET',
+        headers:{
+          'apikey':SUPABASE_KEY,
+          'Authorization':'Bearer ' + SUPABASE_KEY
+        },
+        cache:'no-store'
+      }
+    );
+
+    if(!response.ok){
+      throw new Error('تعذر جلب المباريات: ' + response.status);
+    }
+
+    const data = await response.json();
+
+    allMatches = Array.isArray(data) ? data : [];
+
+    renderFeatured();
+    renderMatches();
+
+    document.getElementById('featuredDate').textContent =
+      new Intl.DateTimeFormat('ar-SA',{
+        dateStyle:'medium'
+      }).format(new Date());
+
+  }catch(error){
+    console.error(error);
+
+    if(!allMatches.length){
+      matchesContainer.innerHTML = `
+        <div class="empty error">
+          تعذر تحميل المباريات حالياً.<br>
+          حاول تحديث الصفحة بعد قليل.
+        </div>
+      `;
+
+      featuredContainer.innerHTML =
+        '<div style="text-align:center;color:#ff8585;padding:15px">تعذر الاتصال بقاعدة البيانات</div>';
+    }
+  }
+}
+
+function shareMatch(home,away,league){
+  const h = decodeURIComponent(home);
+  const a = decodeURIComponent(away);
+  const l = decodeURIComponent(league);
+
+  const message = '⚽ ' + h + ' × ' + a +
+    '\n🏆 ' + l +
+    '\n\nمدرج الفهد LIVE';
+
+  if(navigator.share){
+    navigator.share({
+      title:'مدرج الفهد LIVE',
+      text:message,
+      url:location.href
+    }).catch(()=>{});
+  }else{
+    copyText(message);
+    alert('تم نسخ تفاصيل المباراة');
+  }
+}
+
+function copyMatch(home,away){
+  const message =
+    decodeURIComponent(home) + ' × ' + decodeURIComponent(away);
+
+  copyText(message);
+  alert('تم نسخ أسماء الفريقين');
+}
+
+function copyText(text){
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).catch(()=>{
+      fallbackCopy(text);
+    });
+  }else{
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text){
+  const area = document.createElement('textarea');
+  area.value = text;
+  area.style.position = 'fixed';
+  area.style.opacity = '0';
+  document.body.appendChild(area);
+  area.select();
 
   try{
-   data=body?JSON.parse(body):[];
-  }catch{
-   throw new Error('تعذر قراءة بيانات المباريات.');
-  }
+    document.execCommand('copy');
+  }catch(e){}
 
-  if(!response.ok){
-   throw new Error('تعذر تحميل المباريات حاليًا.');
-  }
-
-  if(!Array.isArray(data)){
-   throw new Error('تعذر قراءة قائمة المباريات.');
-  }
-
-  allMatches=data.map(row=>({
-   id:row.id,
-   home:row.home,
-   away:row.away,
-   league:row.league,
-   match_time:row.match_time,
-   status:normalizeStatus(row.status),
-   stream:typeof row.stream==='string'?row.stream.trim():''
-  }));
-
-  render();
-
- }catch(error){
-  console.error('Matches API error:',error);
-  matchesEl.replaceChildren();
-  message.classList.remove('hidden');
-  message.classList.add('error');
-
-  if(error.name==='AbortError'){
-   message.textContent='انتهت مهلة الاتصال. تحقق من الإنترنت ثم حدّث الصفحة.';
-  }else{
-   message.textContent='تعذر تحميل المباريات حاليًا. حاول تحديث الصفحة.';
-  }
-
-  countEl.textContent='تعذر تحميل المباريات';
-
- }finally{
-
-   clearTimeout(timeout);
- }
+  area.remove();
 }
+
+document.querySelectorAll('.filter-btn').forEach(button=>{
+  button.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(item=>{
+      item.classList.remove('active');
+    });
+
+    button.classList.add('active');
+    currentFilter = button.dataset.filter;
+    renderMatches();
+  });
+});
+
+searchInput.addEventListener('input',renderMatches);
 
 loadMatches();
 
 setInterval(loadMatches,60000);
 
+setInterval(()=>{
+  if(allMatches.length){
+    renderFeatured();
+  }
+},1000);
+
 </script>
+
 </body>
 </html>
