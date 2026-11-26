@@ -887,4 +887,15 @@ async function loadMatches(){
   countEl.textContent='تعذر تحميل المباريات';
 
  }finally{
- 
+
+   clearTimeout(timeout);
+ }
+}
+
+loadMatches();
+
+setInterval(loadMatches,60000);
+
+</script>
+</body>
+</html>
