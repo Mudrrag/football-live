@@ -21,7 +21,6 @@
   --text:#f5f2e9;
   --muted:#9a9a8e;
   --green:#00d878;
-  --red:#ff5555;
   --border:rgba(198,166,107,.18);
 }
 
@@ -226,35 +225,54 @@ header{padding:22px 0 12px}
   overflow-wrap:anywhere;
 }
 
-.team-caption{
-  color:var(--muted);
-  font-size:11px;
-  margin-top:5px;
-}
-
 .vs{
   color:var(--gold);
   font-size:13px;
   font-weight:900;
 }
 
+.team-logo{
+  width:68px;
+  height:68px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 10px;
+  filter:drop-shadow(0 3px 8px rgba(0,0,0,.4));
+}
+
+.logo-fallback{
+  width:68px;
+  height:68px;
+  border:1px solid var(--border);
+  border-radius:50%;
+  background:linear-gradient(145deg,#24251d,#10110e);
+  color:var(--gold2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 10px;
+  font-size:19px;
+  font-weight:900;
+}
+
 .match-info{
   text-align:center;
-  margin-top:20px;
-  padding-top:15px;
+  margin-top:22px;
+  padding:17px 10px 5px;
   border-top:1px solid var(--border);
 }
 
 .match-time{
-  font-size:14px;
+  font-size:19px;
   color:var(--gold2);
-  font-weight:700;
+  font-weight:900;
+  line-height:1.8;
 }
 
 .countdown{
-  margin-top:8px;
+  margin-top:7px;
   color:var(--muted);
-  font-size:12px;
+  font-size:13px;
 }
 
 .countdown strong{color:var(--gold2)}
@@ -264,7 +282,6 @@ header{padding:22px 0 12px}
 <style>
 .search-box{
   margin-top:20px;
-  position:relative;
 }
 
 .search-box input{
@@ -278,9 +295,7 @@ header{padding:22px 0 12px}
   outline:none;
 }
 
-.search-box input:focus{
-  border-color:var(--gold);
-}
+.search-box input:focus{border-color:var(--gold)}
 
 .filters{
   display:flex;
@@ -374,9 +389,25 @@ header{padding:22px 0 12px}
 }
 
 .card-team{
-  font-size:15px;
+  font-size:14px;
   font-weight:900;
   overflow-wrap:anywhere;
+}
+
+.card-team img{
+  width:55px;
+  height:55px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 9px;
+  filter:drop-shadow(0 3px 7px rgba(0,0,0,.4));
+}
+
+.card-team .logo-fallback{
+  width:55px;
+  height:55px;
+  margin:0 auto 9px;
+  font-size:16px;
 }
 
 .card-vs{
@@ -388,27 +419,30 @@ header{padding:22px 0 12px}
 .card-bottom{
   border-top:1px solid rgba(255,255,255,.06);
   margin-top:16px;
-  padding-top:12px;
+  padding-top:13px;
   display:flex;
+  flex-direction:column;
   align-items:center;
-  justify-content:space-between;
-  gap:8px;
+  gap:10px;
 }
 
 .card-time{
-  font-size:11px;
-  color:var(--muted);
+  font-size:15px;
+  font-weight:900;
+  color:var(--gold2);
+  text-align:center;
+  line-height:1.8;
 }
 
 .watch-btn{
+  display:inline-block;
   text-decoration:none;
   background:linear-gradient(135deg,#e3c68e,#b58e4e);
   color:#17130b;
   font-weight:900;
-  font-size:11px;
-  padding:8px 13px;
+  font-size:12px;
+  padding:9px 18px;
   border-radius:9px;
-  white-space:nowrap;
 }
 
 .watch-btn.disabled{
@@ -420,6 +454,7 @@ header{padding:22px 0 12px}
 .card-actions{
   display:flex;
   gap:7px;
+  justify-content:center;
   margin-top:10px;
 }
 
@@ -542,388 +577,404 @@ footer strong{color:var(--gold)}
 </footer>
 
 </div>
-
 <script>
-const SUPABASE_URL = 'https://mksjdavhrbtorkqoocez.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_Ql5GPUQvGkh6oKwcoG7i7w_8K2DUX6s';
+const SUPABASE_URL = "https://mksjdavhrbtorkqoocez.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Ql5GPUQvGkh6oKwcoG7i7w_8K2DUX6s";
 
-const matchesContainer = document.getElementById('matches');
-const featuredContainer = document.getElementById('featured');
-const searchInput = document.getElementById('searchInput');
+const matchesEl = document.getElementById("matches");
+const searchEl = document.getElementById("search");
+const filterButtons = document.querySelectorAll("[data-filter]");
 
 let allMatches = [];
-let currentFilter = 'all';
+let currentFilter = "all";
+let logoCache = {};
 
-function escapeHTML(value){
-  return String(value ?? '').replace(/[&<>"']/g, function(char){
-    return {
-      '&':'&amp;',
-      '<':'&lt;',
-      '>':'&gt;',
-      '"':'&quot;',
-      "'":'&#039;'
-    }[char];
-  });
+const logoAliases = {
+  "الهلال":"Al-Hilal",
+  "الهلال السعودي":"Al-Hilal",
+  "النصر":"Al-Nassr",
+  "النصر السعودي":"Al-Nassr",
+  "الاتحاد":"Al-Ittihad",
+  "الأهلي":"Al-Ahli",
+  "الاهلي":"Al-Ahli",
+  "الشباب":"Al-Shabab",
+  "القادسية":"Al-Qadsiah",
+  "الاتفاق":"Al-Ettifaq",
+  "الفتح":"Al-Fateh",
+  "الخلود":"Al-Kholood",
+  "ضمك":"Damac",
+  "الرائد":"Al-Raed",
+  "التعاون":"Al-Taawoun",
+  "الوحدة":"Al-Wehda",
+  "الرياض":"Al-Riyadh",
+  "الخليج":"Al-Khaleej",
+  "الفيحاء":"Al-Fayha",
+  "ليفربول":"Liverpool",
+  "مانشستر سيتي":"Manchester City",
+  "مانشستر يونايتد":"Manchester United",
+  "آرسنال":"Arsenal",
+  "ارسنال":"Arsenal",
+  "تشيلسي":"Chelsea",
+  "توتنهام":"Tottenham Hotspur",
+  "ريال مدريد":"Real Madrid",
+  "برشلونة":"Barcelona",
+  "أتلتيكو مدريد":"Atletico Madrid",
+  "بايرن ميونخ":"Bayern Munich",
+  "باريس سان جيرمان":"Paris Saint-Germain",
+  "يوفنتوس":"Juventus",
+  "إنتر":"Inter",
+  "ميلان":"AC Milan"
+};
+
+function normalizeName(name) {
+  return String(name || "")
+    .trim()
+    .replace(/[أإآ]/g, "ا")
+    .replace(/ة/g, "ه")
+    .replace(/\s+/g, " ")
+    .toLowerCase();
 }
 
-function statusType(status){
-  const s = String(status || '').trim().toLowerCase();
-
-  if(
-    s.includes('مباشر') ||
-    s.includes('live') ||
-    s.includes('جارية')
-  ) return 'live';
-
-  if(
-    s.includes('انته') ||
-    s.includes('finished') ||
-    s.includes('full time') ||
-    s.includes('مكتمل')
-  ) return 'finished';
-
-  return 'upcoming';
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  })[char]);
 }
 
-function statusLabel(status){
-  const type = statusType(status);
-
-  if(type === 'live') return 'مباشر';
-  if(type === 'finished') return 'انتهت';
-  return 'قادمة';
+function teamInitials(name) {
+  return escapeHTML(String(name || "?").trim().slice(0, 2));
 }
 
-function parseMatchDate(value){
-  if(!value) return null;
+function teamLogoHTML(name, large = false) {
+  const key = normalizeName(name);
+  const logo = logoCache[key];
+  const sizeClass = large ? "team-logo" : "";
+
+  if (logo) {
+    return `
+      <img class="${sizeClass}" src="${escapeHTML(logo)}"
+        alt="${escapeHTML(name)}"
+        loading="lazy"
+        onload="this.nextElementSibling.style.display='none'"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <span class="logo-fallback" style="display:none">${teamInitials(name)}</span>
+    `;
+  }
+
+  return `<span class="logo-fallback">${teamInitials(name)}</span>`;
+}
+
+function readLogoCache(name) {
+  try {
+    return localStorage.getItem("cheetah_logo_" + normalizeName(name));
+  } catch {
+    return null;
+  }
+}
+
+function saveLogoCache(name, url) {
+  try {
+    localStorage.setItem("cheetah_logo_" + normalizeName(name), url || "none");
+  } catch {}
+}
+
+async function getTeamLogo(name) {
+  const key = normalizeName(name);
+
+  if (Object.prototype.hasOwnProperty.call(logoCache, key)) {
+    return logoCache[key];
+  }
+
+  const saved = readLogoCache(name);
+
+  if (saved !== null) {
+    logoCache[key] = saved === "none" ? "" : saved;
+    return logoCache[key];
+  }
+
+  const searchName = logoAliases[name] || name;
+
+  try {
+    const response = await fetch(
+      "https://www.thesportsdb.com/api/v1/json/123/searchteams.php?t=" +
+      encodeURIComponent(searchName)
+    );
+
+    if (!response.ok) throw new Error("Logo request failed");
+
+    const data = await response.json();
+    const team = data.teams?.[0];
+
+    const logo =
+      team?.strBadge ||
+      team?.strTeamBadge ||
+      team?.strTeamLogo ||
+      "";
+
+    logoCache[key] = logo;
+    saveLogoCache(name, logo);
+
+    return logo;
+  } catch (error) {
+    logoCache[key] = "";
+    saveLogoCache(name, "");
+    return "";
+  }
+}
+
+function formatMatchTime(value) {
+  if (!value) return "موعد المباراة غير محدد";
 
   const date = new Date(value);
 
-  if(!isNaN(date.getTime())) return date;
+  if (isNaN(date.getTime())) return escapeHTML(value);
 
-  return null;
-}
-
-function formatMatchTime(value){
-  if(!value) return 'الوقت غير محدد';
-
-  const date = parseMatchDate(value);
-
-  if(date){
-    return new Intl.DateTimeFormat('ar-SA',{
-      dateStyle:'medium',
-      timeStyle:'short'
-    }).format(date);
-  }
-
-  return String(value);
-}
-
-function getCountdown(value){
-  const date = parseMatchDate(value);
-
-  if(!date) return '';
-
-  const diff = date.getTime() - Date.now();
-
-  if(diff <= 0) return 'موعد المباراة قد حان';
-
-  const days = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const minutes = Math.floor((diff % 3600000) / 60000);
-  const seconds = Math.floor((diff % 60000) / 1000);
-
-  let result = '';
-
-  if(days) result += days + ' يوم ';
-  if(hours) result += hours + ' ساعة ';
-  if(minutes) result += minutes + ' دقيقة ';
-
-  if(!days && !hours) result += seconds + ' ثانية';
-
-  return 'باقي <strong>' + result + '</strong>';
-}
-
-function sortMatches(matches){
-  const priority = {live:0,upcoming:1,finished:2};
-
-  return [...matches].sort((a,b)=>{
-    const pa = priority[statusType(a.status)];
-    const pb = priority[statusType(b.status)];
-
-    if(pa !== pb) return pa - pb;
-
-    const da = parseMatchDate(a.match_time);
-    const db = parseMatchDate(b.match_time);
-
-    if(da && db){
-      if(statusType(a.status) === 'finished'){
-        return db - da;
-      }
-      return da - db;
-    }
-
-    return 0;
+  return date.toLocaleString("ar-SA", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    hour: "numeric",
+    minute: "2-digit"
   });
 }
 
-function getFeaturedMatch(){
-  const live = allMatches.find(m=>statusType(m.status)==='live');
-  if(live) return live;
+function getMatchStatus(status) {
+  const value = String(status || "").trim().toLowerCase();
 
-  const upcoming = sortMatches(
-    allMatches.filter(m=>statusType(m.status)==='upcoming')
-  );
+  if (["مباشر", "live", "playing"].includes(value)) return "live";
+  if (["انتهت", "منتهية", "finished", "ft"].includes(value)) return "finished";
 
-  return upcoming[0] || allMatches[0] || null;
+  return "upcoming";
 }
 
-function renderFeatured(){
+function statusLabel(status) {
+  const type = getMatchStatus(status);
+
+  if (type === "live") return "مباشر";
+  if (type === "finished") return "انتهت";
+
+  return "قادمة";
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+async function loadTeamLogos() {
+  const names = [...new Set(
+    allMatches.flatMap(match => [match.home, match.away])
+      .filter(Boolean)
+  )];
+
+  let loaded = 0;
+
+  for (const name of names) {
+    const key = normalizeName(name);
+
+    if (Object.prototype.hasOwnProperty.call(logoCache, key)) continue;
+
+    await getTeamLogo(name);
+    loaded++;
+
+    if (loaded < names.length) await delay(2100);
+  }
+
+  renderMatches();
+  renderFeatured();
+}
+
+function getFeaturedMatch() {
+  return allMatches.find(m => getMatchStatus(m.status) === "live") ||
+    allMatches.find(m => getMatchStatus(m.status) === "upcoming");
+}
+
+function renderFeatured() {
+  const featuredEl =
+    document.getElementById("featured") ||
+    document.getElementById("featuredMatch") ||
+    document.querySelector(".featured-content");
+
+  if (!featuredEl) return;
+
   const match = getFeaturedMatch();
 
-  if(!match){
-    featuredContainer.innerHTML =
-      '<div style="text-align:center;color:#999;padding:15px">لا توجد مباريات حالياً</div>';
+  if (!match) {
+    featuredEl.innerHTML = "";
     return;
   }
 
-  const type = statusType(match.status);
-  const countdown = type === 'upcoming'
-    ? getCountdown(match.match_time)
-    : '';
-
-  featuredContainer.innerHTML = `
-    <div class="featured-top">
-      <span class="featured-label">
-        ${type === 'live' ? '● مواجهة مباشرة' : 'المواجهة المختارة'}
-      </span>
-      <span class="league">${escapeHTML(match.league || 'مباراة كرة قدم')}</span>
-    </div>
-
-    <div class="teams">
-      <div class="team">
-        <div class="team-name">${escapeHTML(match.home || 'الفريق الأول')}</div>
-        <div class="team-caption">الفريق الأول</div>
+  featuredEl.innerHTML = `
+    <div class="featured-teams">
+      <div class="featured-team">
+        ${teamLogoHTML(match.home, true)}
+        <strong>${escapeHTML(match.home)}</strong>
       </div>
 
-      <div class="vs">VS</div>
+      <div class="featured-vs">VS</div>
 
-      <div class="team">
-        <div class="team-name">${escapeHTML(match.away || 'الفريق الثاني')}</div>
-        <div class="team-caption">الفريق الثاني</div>
+      <div class="featured-team">
+        ${teamLogoHTML(match.away, true)}
+        <strong>${escapeHTML(match.away)}</strong>
       </div>
     </div>
 
     <div class="match-info">
-      <div class="match-time">${escapeHTML(formatMatchTime(match.match_time))}</div>
-      <div class="countdown">${countdown || escapeHTML(statusLabel(match.status))}</div>
+      <span class="match-time">${formatMatchTime(match.match_time)}</span>
+      <span class="match-status">${statusLabel(match.status)}</span>
     </div>
+
+    ${match.stream ? `
+      <a class="watch-btn" href="${escapeHTML(match.stream)}"
+         target="_blank" rel="noopener noreferrer">مشاهدة المباراة</a>
+    ` : ""}
   `;
 }
 
-function renderMatches(){
-  const query = searchInput.value.trim().toLowerCase();
+function renderMatches() {
+  const query = normalizeName(searchEl?.value || "");
 
-  let filtered = sortMatches(allMatches).filter(match=>{
-    const type = statusType(match.status);
+  const filtered = allMatches.filter(match => {
+    const status = getMatchStatus(match.status);
 
-    const filterMatch =
-      currentFilter === 'all' || type === currentFilter;
+    const matchesFilter =
+      currentFilter === "all" ||
+      currentFilter === status;
 
-    const searchText = [
-      match.home,
-      match.away,
-      match.league
-    ].join(' ').toLowerCase();
+    const text = normalizeName(
+      `${match.home} ${match.away} ${match.league || ""}`
+    );
 
-    return filterMatch && searchText.includes(query);
+    return matchesFilter && text.includes(query);
   });
 
-  document.getElementById('matchCount').textContent =
-    filtered.length + ' مباراة';
+  if (!matchesEl) return;
 
-  if(!filtered.length){
-    matchesContainer.innerHTML = `
-      <div class="empty">
-        لا توجد مباريات مطابقة لبحثك حالياً 🐆
+  if (!filtered.length) {
+    matchesEl.innerHTML = `
+      <div class="empty-state">
+        لا توجد مباريات مطابقة حالياً
       </div>
     `;
     return;
   }
 
-  matchesContainer.innerHTML = filtered.map(match=>{
-    const type = statusType(match.status);
-    const stream = String(match.stream || '').trim();
-
-    const watchButton = stream
-      ? `<a class="watch-btn" href="${escapeHTML(stream)}"
-          target="_blank" rel="noopener noreferrer">▶ مشاهدة</a>`
-      : `<span class="watch-btn disabled">لا يوجد رابط</span>`;
+  matchesEl.innerHTML = filtered.map(match => {
+    const status = getMatchStatus(match.status);
 
     return `
       <article class="match-card">
-
         <div class="card-top">
-          <span class="card-league">${escapeHTML(match.league || 'بطولة غير محددة')}</span>
-          <span class="status ${type}">${statusLabel(match.status)}</span>
+          <span class="league-name">${escapeHTML(match.league || "مباراة")}</span>
+          <span class="status ${status}">${statusLabel(match.status)}</span>
         </div>
 
         <div class="card-teams">
-          <div class="card-team">${escapeHTML(match.home || 'الفريق الأول')}</div>
-          <div class="card-vs">VS</div>
-          <div class="card-team">${escapeHTML(match.away || 'الفريق الثاني')}</div>
+          <div class="card-team">
+            ${teamLogoHTML(match.home)}
+            <strong>${escapeHTML(match.home)}</strong>
+          </div>
+
+          <span class="card-vs">VS</span>
+
+          <div class="card-team">
+            ${teamLogoHTML(match.away)}
+            <strong>${escapeHTML(match.away)}</strong>
+          </div>
         </div>
 
         <div class="card-bottom">
-          <span class="card-time">
-            ${escapeHTML(formatMatchTime(match.match_time))}
-          </span>
-          ${watchButton}
-        </div>
+          <span class="card-time">${formatMatchTime(match.match_time)}</span>
 
-        <div class="card-actions">
-          <button class="action-btn"
-            onclick="shareMatch('${encodeURIComponent(match.home || '')}','${encodeURIComponent(match.away || '')}','${encodeURIComponent(match.league || '')}')">
-            مشاركة المباراة
-          </button>
-          <button class="action-btn"
-            onclick="copyMatch('${encodeURIComponent(match.home || '')}','${encodeURIComponent(match.away || '')}')">
-            نسخ الاسم
-          </button>
+          ${match.stream ? `
+            <a class="watch-btn" href="${escapeHTML(match.stream)}"
+               target="_blank" rel="noopener noreferrer">
+              مشاهدة المباراة
+            </a>
+          ` : `
+            <span class="no-stream">رابط المشاهدة غير متوفر</span>
+          `}
         </div>
-
       </article>
     `;
-  }).join('');
+  }).join("");
 }
-</script>
 
-<script>
-async function loadMatches(){
-  try{
+async function loadMatches() {
+  try {
     const response = await fetch(
-      SUPABASE_URL + '/rest/v1/matches?select=id,created_at,home,away,league,match_time,status,stream',
+      `${SUPABASE_URL}/rest/v1/matches?select=*&order=match_time.asc`,
       {
-        method:'GET',
-        headers:{
-          'apikey':SUPABASE_KEY,
-          'Authorization':'Bearer ' + SUPABASE_KEY
-        },
-        cache:'no-store'
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`
+        }
       }
     );
 
-    if(!response.ok){
-      throw new Error('تعذر جلب المباريات: ' + response.status);
+    if (!response.ok) {
+      throw new Error("تعذر تحميل المباريات");
     }
 
-    const data = await response.json();
-
-    allMatches = Array.isArray(data) ? data : [];
+    allMatches = await response.json();
 
     renderFeatured();
     renderMatches();
+    loadTeamLogos();
 
-    document.getElementById('featuredDate').textContent =
-      new Intl.DateTimeFormat('ar-SA',{
-        dateStyle:'medium'
-      }).format(new Date());
+  } catch (error) {
+    console.error("Matches error:", error);
 
-  }catch(error){
-    console.error(error);
-
-    if(!allMatches.length){
-      matchesContainer.innerHTML = `
-        <div class="empty error">
-          تعذر تحميل المباريات حالياً.<br>
-          حاول تحديث الصفحة بعد قليل.
+    if (matchesEl) {
+      matchesEl.innerHTML = `
+        <div class="empty-state">
+          تعذر الاتصال بقاعدة البيانات، حاول تحديث الصفحة
         </div>
       `;
-
-      featuredContainer.innerHTML =
-        '<div style="text-align:center;color:#ff8585;padding:15px">تعذر الاتصال بقاعدة البيانات</div>';
     }
   }
 }
 
-function shareMatch(home,away,league){
-  const h = decodeURIComponent(home);
-  const a = decodeURIComponent(away);
-  const l = decodeURIComponent(league);
-
-  const message = '⚽ ' + h + ' × ' + a +
-    '\n🏆 ' + l +
-    '\n\nمدرج الفهد LIVE';
-
-  if(navigator.share){
-    navigator.share({
-      title:'مدرج الفهد LIVE',
-      text:message,
-      url:location.href
-    }).catch(()=>{});
-  }else{
-    copyText(message);
-    alert('تم نسخ تفاصيل المباراة');
-  }
+if (searchEl) {
+  searchEl.addEventListener("input", renderMatches);
 }
 
-function copyMatch(home,away){
-  const message =
-    decodeURIComponent(home) + ' × ' + decodeURIComponent(away);
+filterButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    currentFilter = button.dataset.filter || "all";
 
-  copyText(message);
-  alert('تم نسخ أسماء الفريقين');
-}
+    filterButtons.forEach(item => item.classList.remove("active"));
+    button.classList.add("active");
 
-function copyText(text){
-  if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(text).catch(()=>{
-      fallbackCopy(text);
-    });
-  }else{
-    fallbackCopy(text);
-  }
-}
-
-function fallbackCopy(text){
-  const area = document.createElement('textarea');
-  area.value = text;
-  area.style.position = 'fixed';
-  area.style.opacity = '0';
-  document.body.appendChild(area);
-  area.select();
-
-  try{
-    document.execCommand('copy');
-  }catch(e){}
-
-  area.remove();
-}
-
-document.querySelectorAll('.filter-btn').forEach(button=>{
-  button.addEventListener('click',()=>{
-    document.querySelectorAll('.filter-btn').forEach(item=>{
-      item.classList.remove('active');
-    });
-
-    button.classList.add('active');
-    currentFilter = button.dataset.filter;
     renderMatches();
   });
 });
 
-searchInput.addEventListener('input',renderMatches);
+window.shareMatch = async function(home, away) {
+  const text = `مباراة ${home} ضد ${away} — مدرج الفهد Live`;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "مدرج الفهد Live",
+        text,
+        url: location.href
+      });
+    } catch (error) {}
+  } else {
+    try {
+      await navigator.clipboard.writeText(text + "\n" + location.href);
+      alert("تم نسخ رابط الموقع");
+    } catch (error) {
+      alert("تعذر النسخ من المتصفح");
+    }
+  }
+};
 
 loadMatches();
-
-setInterval(loadMatches,60000);
-
-setInterval(()=>{
-  if(allMatches.length){
-    renderFeatured();
-  }
-},1000);
-
+setInterval(loadMatches, 60000);
 </script>
-
 </body>
-</html>
+  </html>
